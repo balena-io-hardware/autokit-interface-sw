@@ -1,0 +1,15 @@
+version: '2.1'
+volumes:
+  core-storage:
+services:
+  autokit:
+    privileged: true
+    build: .
+    network_mode: host
+    volumes:
+      - 'core-storage:/data'
+    labels:
+      io.balena.features.dbus: '1'
+      io.balena.features.balena-socket: '1'
+      io.balena.features.balena-api: '1'
+      io.balena.features.kernel-modules: '1'
