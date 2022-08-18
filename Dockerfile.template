@@ -1,0 +1,32 @@
+FROM balenalib/fincm3-node:14-buster
+
+WORKDIR /usr/app
+
+RUN install_packages libusb-dev libudev-dev libdbus-1-dev python3 make build-essential git linux-headers \
+    gstreamer1.0-tools gstreamer1.0-plugins-base gstreamer1.0-plugins-bad gstreamer1.0-plugins-good \
+    bluez \
+    uhubctl \
+    lshw \
+    python3-pip \
+    python3-setuptools 
+
+COPY package*.json ./
+RUN npm ci
+
+COPY tsconfig.json ./
+COPY lib ./lib
+
+# build typescript
+RUN npm run build
+
+ENV UDEV 1
+ENV DBUS_SYSTEM_BUS_ADDRESS unix:path=/host/run/dbus/system_bus_socket
+
+# linux automation sd mux board requires this to be installed
+RUN pip3 install usbsdmux
+
+COPY entry.sh entry.sh
+
+CMD ["./entry.sh"]
+
+
