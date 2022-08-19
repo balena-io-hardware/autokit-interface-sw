@@ -26,6 +26,12 @@ interface SdMux extends Base{
     DEV_SD: string;
 }
 
+interface Serial extends Base{
+    serial: any;
+    write(data: string): Promise<void>;
+    open(): Promise<void>;
+    close(): Promise<void>;
+}
 
 // specify which peripherals are in use
 interface AutokitConfig{
@@ -34,4 +40,5 @@ interface AutokitConfig{
     network: string; 
     video: string;
     usbBootPort?: string;
+    serial: string;
 }
