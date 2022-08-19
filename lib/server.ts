@@ -19,7 +19,8 @@ const autokitConfig = {
     sdMux: process.env.SD_MUX || 'linuxAut',
     network: process.env.NETWORK ||  'linuxNetwork',
     video: process.env.VIDEO || 'linuxVideo',
-    usbBootPort: process.env.USB_BOOT_PORT || '4'
+    usbBootPort: process.env.USB_BOOT_PORT || '4',
+    serial: process.env.SERIAL || 'ftdi'
 }
 
 async function main(){
@@ -143,6 +144,56 @@ async function main(){
             }
         },
     );*/
+
+    /* Serial */
+    app.post(
+        '/serial/open',
+        async (
+            req: express.Request,
+            res: express.Response,
+            next: express.NextFunction,
+        ) => {
+            try {
+                await autoKit.serial.open();
+                res.send('OK');
+            } catch (err) {
+                next(err);
+            }
+        },
+    );
+
+    app.post(
+        '/serial/close',
+        async (
+            req: express.Request,
+            res: express.Response,
+            next: express.NextFunction,
+        ) => {
+            try {
+                await autoKit.serial.close();
+                res.send('OK');
+            } catch (err) {
+                next(err);
+            }
+        },
+    );
+
+    app.post(
+        '/serial/write',
+        jsonParser,
+        async (
+            req: express.Request,
+            res: express.Response,
+            next: express.NextFunction,
+        ) => {
+            try {
+                let result = await autoKit.serial.write(req.body.data);
+                res.send(result);
+            } catch (err) {
+                next(err);
+            }
+        },
+    );
 
     /* video */
     app.post(

@@ -3,6 +3,7 @@ import { networkImplementations } from './features/network';
 import { powerImplementations } from './features/power';
 import { videoImplementations } from './features/video';
 import { sdMuxImplementations } from './features/sd-mux';
+import { serialImplementations } from './features/serial';
 
 import { flash } from './flashing'
 
@@ -12,6 +13,7 @@ export class Autokit{
     public network: Network;
     public video : Video;
     public sdMux: SdMux;
+    public serial: Serial;
 
     constructor(config: AutokitConfig){
         this.config = config;
@@ -19,6 +21,7 @@ export class Autokit{
         this.network = new networkImplementations[this.config.network]();
         this.video = new videoImplementations[this.config.video]();
         this.sdMux = new sdMuxImplementations[this.config.sdMux]();
+        this.serial = new serialImplementations[this.config.serial]();
     }
 
     async setup(){
@@ -29,6 +32,7 @@ export class Autokit{
         await this.network.setup();
         await this.video.setup();
         await this.sdMux.setup();
+        await this.serial.setup();
         console.log(`Setup completed!`)
         // TODO check for what features are enabled, and expose this to the user - give a summary
     }
@@ -45,5 +49,6 @@ export class Autokit{
         await this.network.teardown();
         await this.video.teardown();
         await this.sdMux.teardown();
+        await this.serial.teardown();
     }
 }

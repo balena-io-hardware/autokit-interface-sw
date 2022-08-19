@@ -90,6 +90,28 @@ curl -X POST <IP>/capture/stop -o capture.tar.gz
 
 Which will send a `.tar.gz` archive of all captured frames as jpeg images. 
 
+### Serial
+
+To open a serial connection to th DUT
+
+```sh
+curl -X POST <IP>/serial/open
+```
+
+To write a string to the DUT over serial
+
+```sh
+curl -X POST <IP>/serial/write -H 'Content-Type: application/json' -d '{"data": "<STRING_TO_WRITE_TO_DUT>"}'
+```
+
+To close the serial connection
+
+```sh
+curl -X POST <IP>/serial/close
+```
+
+This will return the response from the DUT, if any.
+
 ### Teardown
 
 Posting to the teardown endpoint will tear down cleanly whatever has been setup on the kit - for example it will de activate any created network hotspots.
