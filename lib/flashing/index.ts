@@ -106,6 +106,81 @@ async function flashSD(filename: string, autoKit: Autokit){
     
 }
 
+async function checkDutPower() {
+    const [stdout, _stderr] = await exec(`cat /sys/class/net/eth1/carrier`);
+    const file = stdout.toString();
+    if (file.includes('1')) {
+        console.log(`DUT is currently On`);
+        return true;
+    } else {
+        console.log(`DUT is currently Off`);
+        return false;
+    }
+}
+
+async function flashFlasher(filename: string, autoKit: Autokit){
+    // first flash sd
+    console.log(`Entering flash method for flasher images...`);
+    await flashSD(filename, autoKit);
+
+    // power on DUT
+    // first have small delay to ensure sd has toggled
+    await delay(1000 * 5);
+    await autoKit.power.on();
+
+    // dut will now internally flash - need to wait until we detect DUT has powered off
+    // can be done through ethernet carrier signal, or through current measurement (or something else...)
+    // FOR NOW: use the network
+    // check if the DUT is on first
+    let dutOn = false;
+    while (!dutOn) {
+        console.log(`waiting for DUT to be on`);
+        dutOn = await checkDutPower();
+        await delay(1000 * 5); // 5 seconds between checks
+    }
+    // once we confirmed the DUT is on, we wait for it to power down again, which signals the flashing has finished
+    // wait initially for 60s and then every 10s before checking if the board performed a shutdown after flashing the internal storage
+    const POLL_INTERVAL = 1000; // 1 second
+    const POLL_TRIES = 20; // 20 tries
+    const TIMEOUT_COUNT = 30;
+    let attempt = 0;
+    await delay(1000 * 60);
+    while (dutOn) {
+        await delay(1000 * 10); // 10 seconds between checks
+        console.log(`waiting for DUT to be off`);
+        dutOn = await checkDutPower();
+        // occasionally the DUT might appear to be powered down, but it isn't - we want to confirm that the DUT has stayed off for an interval of time
+        if (!dutOn) {
+            let offCount = 0;
+            console.log(`detected DUT has powered off - confirming...`);
+            for (let tries = 0; tries < POLL_TRIES; tries++) {
+                await delay(POLL_INTERVAL);
+                dutOn = await checkDutPower();
+                if (!dutOn) {
+                    offCount += 1;
+                }
+            }
+            console.log(
+                `DUT stayted off for ${offCount} checks, expected: ${POLL_TRIES}`,
+            );
+            if (offCount !== POLL_TRIES) {
+                // if the DUT didn't stay off, then we must try the loop again
+                dutOn = true;
+            }
+        }
+        attempt += 1;
+        if (attempt === TIMEOUT_COUNT){
+            throw new Error(`Timed out while trying to flash internal storage!!`)
+        }
+    }
+    console.log('Internally flashed - powering off DUT');
+    // power off and toggle mux.
+    await autoKit.power.off();
+    await autoKit.sdMux.toggleMux('host');
+    // add a slight delay here to avoid powering off and on too quickly
+    await delay(1000*5)
+}
+
 async function flashUsbBoot(filename: string, autoKit: Autokit, port: string){
         console.log(`Entering flash method for USB-Boot devices...`);
 
@@ -225,6 +300,10 @@ async function flash(filename: string, deviceType: string, autoKit: Autokit, por
                 throw new Error('No usb port specified!')
             }
             await flashUsbBoot(filename, autoKit, port);
+            break;
+        }
+        case 'flasher': {
+            await flashFlasher(filename, autoKit);
             break;
         }
     }
