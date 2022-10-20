@@ -1,4 +1,18 @@
 - commits:
+    - subject: Add double relay support
+      hash: 58181cff29af4490e2cb768afcbcf04f4ef66817
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+        signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+      author: Pedro Henrique Kopper
+      nested: []
+  version: 0.1.0
+  title: ""
+  date: 2022-10-20T14:28:26.427Z
+- commits:
     - subject: Correct typos and add environment vars docs
       hash: dd09f4a8e396c858516c0fc6ed50e18559ae6287
       body: ""
