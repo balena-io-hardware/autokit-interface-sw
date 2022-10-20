@@ -1,0 +1,72 @@
+- commits:
+    - subject: convert from balenaCI to flowzone
+      hash: 4d7686ae5a7b2e56ba9c4f6414191c2698702845
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 0.0.6
+  title: ""
+  date: 2022-10-19T11:20:45.285Z
+- version: 0.0.5
+  date: 2022-09-02T09:50:56Z
+  commits:
+    - hash: 44b64c710da59ec31726e87d29402f8dcdafaa00
+      author: rcooke-warwick
+      footers:
+        change-type: patch
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      subject: add flasher iamge support
+      body: null
+- version: 0.0.4
+- date: 2022-08-19T13:12:01Z
+- commits:
+    - hash: d9d824340bf4eb3fa32242ab49d5b59212d05824
+- commits:
+    - author: rcooke-warwick
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - footers:
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+- commits:
+    - subject: add ftdi serial read/write
+- commits:
+    - body: null
+- version: 0.0.3
+- date: 2022-08-18T10:18:01Z
+- commits:
+    - hash: 755f7a1955bdd0b87340fab64b1db8cddb9ef938
+- commits:
+    - author: rcooke-warwick
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - footers:
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+- commits:
+    - subject: delete test file
+- commits:
+    - body: null
+- version: 0.0.2
+- date: 2022-08-18T08:27:59Z
+- commits:
+    - hash: 4a56d5e467c633a109fe6a90464ab1d37044f0c7
+- commits:
+    - author: rcooke-warwick
+- commits:
+    - footers:
+        change-type: patch
+- commits:
+    - footers:
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+- commits:
+    - subject: initial commit of sw interface
+- commits:
+    - body: null
