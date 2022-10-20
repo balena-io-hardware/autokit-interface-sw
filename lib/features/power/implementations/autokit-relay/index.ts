@@ -18,13 +18,13 @@ export class AutokitRelay implements Power {
     // Power on the DUT
     async on(voltage?: number): Promise<void> {
         console.log(`Powering on DUT...`)
-        await this.relay.setState(1, true);
+        await this.relay.setState(0, true);
     }
 
     // Power off the DUT
     async off(): Promise<void> {
         console.log(`Powering off DUT...`)
-        await this.relay.setState(1, false);
+        await this.relay.setState(0, false);
     }
 
     async getState(): Promise<string> {
