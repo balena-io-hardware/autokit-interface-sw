@@ -3,6 +3,8 @@ volumes:
   core-storage:
 services:
   autokit:
+    environment:
+      - SD_MUX=autokitSdMux
     privileged: true
     build: .
     network_mode: host
