@@ -1,4 +1,18 @@
 - commits:
+    - subject: Correct typos and add environment vars docs
+      hash: dd09f4a8e396c858516c0fc6ed50e18559ae6287
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+        signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+      author: Pedro Henrique Kopper
+      nested: []
+  version: 0.0.8
+  title: ""
+  date: 2022-10-20T14:17:27.552Z
+- commits:
     - subject: Fix typo in fincm3 device spec
       hash: 6ee1faf236438563ab9dddb8c1881f681a007cfd
       body: ""
