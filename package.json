@@ -1,15 +1,18 @@
 {
   "name": "autokit",
-  "version": "0.0.5",
+  "version": "0.0.6",
   "description": "",
   "main": "build/index.js",
   "files": [
     "build/"
   ],
   "scripts": {
-    "build": "npm install && tsc",
+    "build": "npx tsc",
     "test": "echo \"No test specified\" && exit 0",
     "prepack": "npm run build"
+  },
+  "engines": {
+    "node": ">=10.0.0 < 16"
   },
   "author": "",
   "license": "ISC",
@@ -42,6 +45,6 @@
     "typescript": "^4.7.4"
   },
   "versionist": {
-    "publishedAt": "2022-09-02T09:41:10.686Z"
+    "publishedAt": "2022-10-19T11:20:45.355Z"
   }
 }
