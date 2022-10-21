@@ -1,4 +1,18 @@
 - commits:
+    - subject: fix balena.yml
+      hash: 8581b9228388ae2e2a72c3678dab230a13dcacf7
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 0.1.2
+  title: ""
+  date: 2022-10-21T11:08:09.063Z
+- commits:
     - subject: add files for hub
       hash: 55abd508ea1687a0309d775ad33e25918a167575
       body: ""
