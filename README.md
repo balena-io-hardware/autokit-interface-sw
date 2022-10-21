@@ -2,7 +2,7 @@
 
 This is the software interface for the Autokit suite. It is a container that runs a web server that exposes Autokit functionality.
 
-This repository also a node library that can be used to control the Autokit from a node application.
+This repository also  a node library that can be used to control the autokit from a node application, without needing the container. It does not include details about the hardware, or assembly. Please refer to the parent repo for links to all relevant documentation [here](https://github.com/balena-io-hardware/autokit)
 
 ## Architecture
 
@@ -10,17 +10,17 @@ The Autokit software interface is designed to take into account that the Autokit
 
 Currently, the Autokit software interface supports:
 
-- flashing 
+- flashing (control over the DUT's SD card/flashing medium, or via usbboot)
 - power on / off
-- controlling the network connection of the DUT
+- controlling the network connection of the DUT, via a wifi hotspot or ethernet connection sharing
 - capturing video output of the DUT
+- sending/recieving serial to/from the DUT
 
 ### Adding to the Autokit software interface
 
 The interface is divided into `features`, which are the pieces of functionality the kit can perform. Each `feature` can have multiple possible `implementations`, which represent potentially different hardware being used to achieve that functionality. 
 
 An implementation can be added so the kit can support a new piece of hardware, but the class used to create that `implementation` must have the same interface as the rest of the `implementations` that implement that `feature`. 
-
 
 ## How to use
 
