@@ -3,7 +3,9 @@ type: sw.application
 description: >-
   Hands free, automated interaction with electronic hardware
 post-provisioning: >-
-  ## Usage instructions ** Setup hardware Before starting, set
+  ## Usage instructions 
+  
+  ** Setup hardware Before starting, set
   up the autokit hardware. The BoM and assembly instruction can be found from
   here: https://github.com/balena-io-hardware/autokit
 
@@ -19,7 +21,7 @@ assets:
     type: blob.asset
     data:
       url: >-
-        https://raw.githubusercontent.com/balena-io-hardware/autokit-sw/master/logo.png
+        https://raw.githubusercontent.com/balena-io-hardware/autokit-sw/master/logo.jpeg
 data:
   defaultDeviceType: raspberrypi4-64
   supportedDeviceTypes:
