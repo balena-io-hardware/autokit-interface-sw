@@ -1,4 +1,18 @@
 - commits:
+    - subject: fix bold in usage in balena.yml
+      hash: dda9b9a8b68df7f8d42519b7d165230b83c90e8e
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 0.1.3
+  title: ""
+  date: 2022-10-21T11:28:24.556Z
+- commits:
     - subject: fix balena.yml
       hash: 8581b9228388ae2e2a72c3678dab230a13dcacf7
       body: ""
