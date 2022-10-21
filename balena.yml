@@ -5,7 +5,7 @@ description: >-
 post-provisioning: >-
   ## Usage instructions 
 
-  ** Setup hardware Before starting, set up the autokit hardware. The BoM and assembly instruction can be found from here: https://github.com/balena-io-hardware/autokit
+  ** Setup hardware Before starting**  set up the autokit hardware. The BoM and assembly instruction can be found from here: https://github.com/balena-io-hardware/autokit
 
   **Application download** Once you power up your device you'll need to allow some time for it to download the application, this typically takes 5-10 minutes but it can take more depending on your internet connection and what device you are using.
 
