@@ -1,4 +1,18 @@
 - commits:
+    - subject: add files for hub
+      hash: 55abd508ea1687a0309d775ad33e25918a167575
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 0.1.1
+  title: ""
+  date: 2022-10-21T10:31:05.869Z
+- commits:
     - subject: Add double relay support
       hash: 58181cff29af4490e2cb768afcbcf04f4ef66817
       body: ""
