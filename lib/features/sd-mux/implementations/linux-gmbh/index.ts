@@ -11,6 +11,9 @@ export class LinuxAut implements SdMux {
 
     async setup(): Promise<void> {
         await execAsync('usbsdmux /dev/sg* host');
+        let sdCheck = await execAsync(`ls /dev/disk/by-id/usb-LinuxAut_sdmux_HS-SD_MMC_* | head -1`);
+        this.DEV_SD = sdCheck.stdout;
+        console.log(`SD MUX is: ${this.DEV_SD}`);
     }
 
     async toggleMux(state: string): Promise<void> {
