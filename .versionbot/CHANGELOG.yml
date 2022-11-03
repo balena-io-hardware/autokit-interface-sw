@@ -1,4 +1,18 @@
 - commits:
+    - subject: trim newline from sd mux name
+      hash: 149d3e3a65151a00af13cfd13e428b81865f23f6
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 0.1.7
+  title: ""
+  date: 2022-11-03T20:24:49.047Z
+- commits:
     - subject: fix sd mux naming
       hash: eacea438d634c962aef2287db063b08704c5f196
       body: ""
