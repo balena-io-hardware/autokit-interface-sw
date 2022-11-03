@@ -1,11 +1,15 @@
 {
-  "name": "autokit",
-  "version": "0.1.10",
-  "description": "",
+  "name": "@balena/autokit",
+  "version": "0.1.6",
+  "description": "software interface for Autokit",
   "main": "build/index.js",
   "files": [
     "build/"
   ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/balena-io-hardware/autokit-sw"
+  },
   "scripts": {
     "build": "npx tsc",
     "test": "echo \"No test specified\" && exit 0",
@@ -15,7 +19,7 @@
     "node": ">=10.0.0 < 16"
   },
   "author": "",
-  "license": "ISC",
+  "license": "Apache-2.0",
   "dependencies": {
     "@balena/testbot": "^1.9.18",
     "@balena/usbrelay": "^0.1.2",
