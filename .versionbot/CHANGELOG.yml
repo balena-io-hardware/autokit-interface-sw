@@ -1,4 +1,18 @@
 - commits:
+    - subject: fix sd mux naming
+      hash: eacea438d634c962aef2287db063b08704c5f196
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 0.1.6
+  title: ""
+  date: 2022-11-03T17:20:23.750Z
+- commits:
     - subject: add deploy to balena action
       hash: 8f7745af4e65292288a0a4a9c9a6cac775becba5
       body: ""
