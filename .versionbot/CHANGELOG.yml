@@ -1,4 +1,18 @@
 - commits:
+    - subject: add deploy to balena action
+      hash: 8f7745af4e65292288a0a4a9c9a6cac775becba5
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 0.1.5
+  title: ""
+  date: 2022-11-03T13:20:07.724Z
+- commits:
     - subject: fix bolding in balena.yaml again, and fix env vars
       hash: ace9605abf2d0dd8c2c7a94af607ab013fca531c
       body: ""
