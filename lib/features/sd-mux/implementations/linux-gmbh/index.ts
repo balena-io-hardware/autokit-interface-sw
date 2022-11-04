@@ -20,11 +20,13 @@ export class LinuxAut implements SdMux {
         if(state === 'host'){
             console.log('Switching SD card to host');
             await execAsync('usbsdmux /dev/sg* host');
-            await delay(2000);
+            // it can take some time before the mux is toggled - so just to be sure, we can add some delay here
+            await delay(5000);
         } else if(state === 'dut'){
             console.log('Switching SD card to DUT');
             await execAsync('usbsdmux /dev/sg* dut');
-            await delay(2000);
+            // it can take some time before the mux is toggled - so just to be sure, we can add some delay here
+            await delay(5000);
         }
     }
 
