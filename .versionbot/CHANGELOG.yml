@@ -1,4 +1,38 @@
 - commits:
+    - subject: fix docs references
+      hash: 9f5144e0e83072a7a9f80e5b0bc9fb62d07c5366
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+    - subject: add delays after switching sd mux
+      hash: bf0f01bccecc33d7cb9d99605920dc23bbc2b625
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+    - subject: switch app container to alpine
+      hash: 4358187ff64d9411dedb1e2691ec96be1ec206a2
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 0.1.8
+  title: ""
+  date: 2022-11-04T15:34:47.334Z
+- commits:
     - subject: trim newline from sd mux name
       hash: 149d3e3a65151a00af13cfd13e428b81865f23f6
       body: ""
