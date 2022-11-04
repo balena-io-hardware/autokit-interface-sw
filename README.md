@@ -34,16 +34,21 @@ Push this container onto an Autokit host. This will start a web server on port 8
 | `USB_BOOT_PORT`      | <PORT_NUMBER> default: 4                                      |
 | `SERIAL`             | { ftdi } default: ftdi                                        |
 
+
+If the host device is a balena device, this will mean that the server will be reachable at `https://<UUID>.balena-devices.com/`, assuming that the public URL of that device is enabled.
+
+If you ssh into the host device, you can use `localhost` as the `<IP>` in the below instructions.
+
 ### Power control
 
 ```sh
-curl <IP>/power/on
+curl -X POST <IP>/power/on
 ```
 
 Can be used to power the DUT on 
 
 ```sh
-curl <IP>/power/off
+curl -X POST <IP>/power/off
 ```
 
 Can be used to power off the DUT
@@ -59,7 +64,7 @@ curl -X POST <IP>/network/createWireless
 This will create an access point with the credentials: `ssid: autokit-wifi` and `psk: autokit-wifi-psk` by default. Credentials can be set by posting a JSON object instead:
 
 ```sh
-curl -X POST localhost/network/createWireless -H "Content-Type: application/json" -d '{"ssid": "<SSID>", "psk": "<PSK>"}'
+curl -X POST <IP>/network/createWireless -H "Content-Type: application/json" -d '{"ssid": "<SSID>", "psk": "<PSK>"}'
 ```
 
 A wired ethernet connection can be provided via:
@@ -73,14 +78,24 @@ curl -X POST <IP>/network/createWired
 Flashing can be performed using:
 
 ```sh
-curl -X POST localhost/flash -H "Content-Type: application/json" -d '{"filename": "<PATH_TO_IMAGE_ON_AUTOKIT>", "deviceType": "DEVICE_TYPE_SLUG_OF_DUT"}'
+curl -X POST <IP>/flash -H "Content-Type: application/json" -d '{"filename": "<PATH_TO_IMAGE_ON_AUTOKIT>", "deviceType": "DEVICE_TYPE_SLUG_OF_DUT"}'
 ```
 
-This requires the image to be on the autokit - this can be achieved through sending it to the autokit using `rsync`:
+This requires the image to be on the autokit - this can be achieved through sending it over `rsync`.
+
+Note that the image must be accessible from the autokit container. One way of achieving this is putting it into a volume. In the app demonstrated in this repo, there is a `core_storage` volume. You can find the path to this volume from the host via:
 
 ```sh
-rsync -ar -vvv --whole-file --progress -e "ssh root@<IP_ADDRESS> -p 22222 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q" <LOCAL_PATH_TO_FILE> :<DESTINATION_ON_AUTOKIT>
+ssh <USERNAME>@ssh.balena-devices.com -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q host <UUID> ls /var/lib/docker/volumes/ | grep core
 ```
+
+and then using the output of that command with this:
+
+```sh
+rsync -ar -vvv --whole-file --progress -e "ssh <USERNAME>@ssh.balena-devices.com -p 22 -o StrictHostKeyChecking=no -o UserKnownHostsFile=/dev/null -q host <UUID>" <PATH_TO_IMAGE_LOCALLY>/ :/var/lib/docker/volumes/<OUTPUT_OF_PREVIOUS_COMMAND/_data
+
+```
+The above instructions assume your host device is a balena device connected to balena cloud.
 
 ### Capture
 
