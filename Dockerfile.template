@@ -1,14 +1,17 @@
-FROM balenalib/fincm3-node:14-buster
+FROM balenalib/armv7hf-alpine-node:14
 
 WORKDIR /usr/app
 
-RUN install_packages libusb-dev libudev-dev libdbus-1-dev python3 make build-essential git linux-headers \
-    gstreamer1.0-tools gstreamer1.0-plugins-base gstreamer1.0-plugins-bad gstreamer1.0-plugins-good \
+RUN install_packages libusb-dev eudev-dev dbus-dev python3 make build-base git linux-headers util-linux \
+    gstreamer-tools gst-plugins-base gst-plugins-bad gst-plugins-good \
     bluez \
-    uhubctl \
-    lshw \
-    python3-pip \
-    python3-setuptools 
+    python3 \
+    py3-pip \
+    py3-setuptools 
+
+  
+# hadolint ignore=DL3018
+RUN apk add --no-cache uhubctl --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community || true
 
 COPY package*.json ./
 RUN npm ci
