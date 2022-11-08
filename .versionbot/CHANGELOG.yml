@@ -1,4 +1,18 @@
 - commits:
+    - subject: allow relay to have NC configuration
+      hash: 5f7a239c02f5c6cacc54dc5d6d5591e0e4af9840
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 0.1.9
+  title: ""
+  date: 2022-11-08T15:31:13.036Z
+- commits:
     - subject: fix docs references
       hash: 9f5144e0e83072a7a9f80e5b0bc9fb62d07c5366
       body: ""
