@@ -15,12 +15,12 @@ const app = express();
 const httpServer = http.createServer(app);
 
 const autokitConfig = {
-    power: process.env.POWER || 'autokitRelay',
-    sdMux: process.env.SD_MUX || 'linuxAut',
-    network: process.env.NETWORK ||  'linuxNetwork',
-    video: process.env.VIDEO || 'linuxVideo',
+    power: process.env.POWER || 'dummyPower',
+    sdMux: process.env.SD_MUX || 'dummySdMux',
+    network: process.env.NETWORK ||  'dummyNetwork',
+    video: process.env.VIDEO || 'dummyVideo',
     usbBootPort: process.env.USB_BOOT_PORT || '4',
-    serial: process.env.SERIAL || 'ftdi'
+    serial: process.env.SERIAL || 'dummySerial'
 }
 
 async function main(){
