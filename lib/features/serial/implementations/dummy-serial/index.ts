@@ -18,6 +18,10 @@ export class DummySerial implements Serial {
         debug("Writing string %o", data);
     }
 
+    async read(): Promise<string> {
+        debug("Reading string string");
+        return("Dummy serial read...")
+    }
 
     async close(){
         debug("Closing serial port");
