@@ -1,4 +1,17 @@
 - commits:
+    - subject: separate serial read and write
+      hash: 64b53b762543039bbb004da10ea8167c6ec8059a
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 0.1.11
+  date: 2022-11-10T11:33:32.131Z
+- commits:
     - subject: use arch in dockerfile to enable multi arch builds
       hash: 43f93c0057c2c06ff4c5e121d763e2bf46bf73d2
       body: ""
@@ -239,7 +252,7 @@
 - commits:
     - subject: add ftdi serial read/write
 - commits:
-    - body: null
+    - ? body
 - version: 0.0.3
 - date: 2022-08-18T10:18:01Z
 - commits:
@@ -255,7 +268,7 @@
 - commits:
     - subject: delete test file
 - commits:
-    - body: null
+    - ? body
 - version: 0.0.2
 - date: 2022-08-18T08:27:59Z
 - commits:
@@ -271,4 +284,4 @@
 - commits:
     - subject: initial commit of sw interface
 - commits:
-    - body: null
+    - ? body
