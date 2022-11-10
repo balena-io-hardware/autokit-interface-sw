@@ -28,7 +28,8 @@ interface SdMux extends Base{
 
 interface Serial extends Base{
     serial: any;
-    write(data: string): Promise<void>;
+    write(data: string): Promise<string | void>;
+    read(): Promise<string>;
     open(): Promise<void>;
     close(): Promise<void>;
 }

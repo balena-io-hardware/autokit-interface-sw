@@ -1,5 +1,4 @@
 import { SerialPort } from "serialport";
-import { delay } from 'bluebird';
 
 export class Ftdi implements Serial {
     public DEV_SERIAL = '/dev/ttyUSB0' || process.env.DEV_SERIAL;
@@ -24,25 +23,28 @@ export class Ftdi implements Serial {
         }
     }
 
-    async write(data: string){
+    async write(data: string): Promise<string | void>  {
         if(this.serial.isOpen){
                 this.serial.write(`${data}\r`);
-                // need to wait here - TODO: make it smarter
-                await delay(1000 * 5);
-                console.log(`This is actually new`)
-                let res = this.serial.read();
-                if(res !== null){
-                    return (res.toString())
-                } else {
-                    return 'No response from DUT...'
-                }
         } else {
             return `Serial connection not open`
         }
     }
 
+    async read(): Promise<string>{
+        if(this.serial.isOpen){
+            let res = this.serial.read();
+            if(res !== null){
+                return (res.toString())
+            } else {
+                return 'No response from DUT...'
+            }
+        } else {
+            return `Serial connection not open`
+        }
+    }
 
-    async close(){
+    async close(): Promise<void>{
         if(this.serial.isOpen){
             this.serial.close();
         } else (
