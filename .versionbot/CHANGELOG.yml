@@ -1,4 +1,18 @@
 - commits:
+    - subject: use arch in dockerfile to enable multi arch builds
+      hash: 43f93c0057c2c06ff4c5e121d763e2bf46bf73d2
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 0.1.10
+  title: ""
+  date: 2022-11-10T11:28:56.299Z
+- commits:
     - subject: allow relay to have NC configuration
       hash: 5f7a239c02f5c6cacc54dc5d6d5591e0e4af9840
       body: ""
