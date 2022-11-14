@@ -4,6 +4,8 @@ volumes:
 services:
   autokit:
     privileged: true
+    environment:
+      - "DEBUG=autokit:*"
     build: .
     network_mode: host
     volumes:
