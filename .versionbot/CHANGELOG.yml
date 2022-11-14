@@ -1,4 +1,18 @@
 - commits:
+    - subject: Add dummy implementations
+      hash: 6b1d1ccbe94e750b622a3d6635a5559f97c80b18
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+        signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+      author: Pedro Henrique Kopper
+      nested: []
+  version: 0.2.0
+  title: ""
+  date: 2022-11-14T14:39:48.092Z
+- commits:
     - subject: use arch in dockerfile to enable multi arch builds
       hash: 43f93c0057c2c06ff4c5e121d763e2bf46bf73d2
       body: ""
