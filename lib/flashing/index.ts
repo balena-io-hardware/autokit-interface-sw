@@ -94,6 +94,9 @@ async function toggleUsb(state: boolean, port: string) {
 
 async function flashSD(filename: string, autoKit: Autokit){
     console.log(`Entering flash method for SD card boot devices...`);
+    await autoKit.power.off();
+    await delay(1000 * 5);
+
     await autoKit.sdMux.toggleMux('host');
 
     // For linux, udev will provide us with a nice id.
@@ -178,7 +181,7 @@ async function flashFlasher(filename: string, autoKit: Autokit){
     await autoKit.power.off();
     await autoKit.sdMux.toggleMux('host');
     // add a slight delay here to avoid powering off and on too quickly
-    await delay(1000*5)
+    await delay(1000*10)
 }
 
 async function flashUsbBoot(filename: string, autoKit: Autokit, port: string){
