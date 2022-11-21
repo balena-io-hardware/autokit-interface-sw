@@ -22,13 +22,13 @@ export class DigitalUSBRelay implements DigitalRelay {
 
     // Power on the DUT
     async on(): Promise<void> {
-        console.log(`Powering on DUT...`)
-        await this.digitalRelay.setState(0, true);
+        console.log(`Toggling digital relay on`)
+        await this.digitalRelay.setState(1, true);
     }
 
     // Power off the DUT
     async off(): Promise<void> {
-        console.log(`Powering off DUT...`)
+        console.log(`Toggling digital relay off`)
         await this.digitalRelay.setState(0, false);
     }
 
