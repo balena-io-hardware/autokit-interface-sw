@@ -3,6 +3,7 @@ import * as express from 'express';
 import * as http from 'http';
 
 import { Stream } from 'stream';
+import * as fs from 'fs';
 import * as tar from 'tar-fs';
 import * as util from 'util';
 const pipeline = util.promisify(Stream.pipeline);
@@ -14,19 +15,41 @@ const jsonParser = bodyParser.json();
 const app = express();
 const httpServer = http.createServer(app);
 
-const autokitConfig = {
-    power: process.env.POWER || 'dummyPower',
-    sdMux: process.env.SD_MUX || 'dummySdMux',
-    network: process.env.NETWORK ||  'dummyNetwork',
-    video: process.env.VIDEO || 'dummyVideo',
-    usbBootPort: process.env.USB_BOOT_PORT || '4',
-    serial: process.env.SERIAL || 'dummySerial'
-}
+const CONFIG_PATH = `/data/config.json`
 
 async function main(){
-    const autoKit = new Autokit(autokitConfig);
+    // read configuration at startup
+    
+    const autokitConfigDefault: AutokitConfig = {
+        power: 'dummyPower',
+        sdMux: 'dummySdMux',
+        network: 'dummyNetwork',
+        video: 'dummyVideo',
+        usbBootPort: '4',
+        serial: 'dummySerial'
+    }
 
-    await autoKit.setup();
+    let autokitConfig = autokitConfigDefault;
+
+    try{
+        const readConfFile = await fs.promises.readFile(CONFIG_PATH);
+        autokitConfig = JSON.parse(readConfFile.toString());
+    } catch (e){
+        console.log(`No config file found - using default configuration`)
+    }
+
+
+    let autoKit: Autokit;
+
+    try{
+        autoKit = new Autokit(autokitConfig);
+        await autoKit.setup();
+    }catch(e){
+        console.log(`Invalid Autokit configuration, Error: ${e}`)
+        console.log(`Using default configuration instead...`)
+        autoKit = new Autokit(autokitConfigDefault);
+        await autoKit.setup();
+    }
 
     /* Power */
     app.post(
@@ -112,38 +135,6 @@ async function main(){
             }
         },
     );
-
-    /*app.post(
-        '/network/enableInternet',
-        async (
-            _req: express.Request,
-            res: express.Response,
-            next: express.NextFunction,
-        ) => {
-            try {
-                await autoKit.network.enableInternet();
-                res.send('OK');
-            } catch (err) {
-                next(err);
-            }
-        },
-    );
-
-    app.post(
-        '/network/disableInternet',
-        async (
-            _req: express.Request,
-            res: express.Response,
-            next: express.NextFunction,
-        ) => {
-            try {
-                await autoKit.network.();
-                res.send('OK');
-            } catch (err) {
-                next(err);
-            }
-        },
-    );*/
 
     /* Serial */
     app.post(
@@ -270,6 +261,60 @@ async function main(){
             }
         },
     );
+
+    app.post(
+        '/config',
+        jsonParser,
+        async (
+            req: express.Request,
+            res: express.Response,
+            next: express.NextFunction,
+        ) => {
+            try {
+                // first tear down existing autokit configuration
+                await autoKit.teardown();
+
+                // each field that is specified, change it in file
+                for(let field in req.body){
+                    console.log(`Trying to change ${field} to ${req.body[field]}`)
+                    autokitConfig[field] = req.body[field];
+                }
+
+
+                try{
+                    autoKit = new Autokit(autokitConfig);
+                    await autoKit.setup();
+                    //write configuration to file if successful - otherwise the old configuration will remain
+                    await fs.promises.writeFile(CONFIG_PATH, JSON.stringify(autokitConfig));
+               
+                }catch(e){
+                    console.log(`Invalid Autokit configuration, Error: ${e}`);
+                    console.log(`Using previous configuration`);
+                }
+
+                res.send('OK');
+            } catch (err) {
+                next(err);
+            }
+        },
+    );
+
+    app.get(
+        '/config',
+        async (
+            _req: express.Request,
+            res: express.Response,
+            next: express.NextFunction,
+        ) => {
+            try {
+                let readConfFile = await fs.promises.readFile(CONFIG_PATH);
+                res.send(readConfFile.toString());
+            } catch (err){
+                next(err)
+            }
+        },
+    );
+
 
     // Start server
 

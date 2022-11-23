@@ -138,3 +138,25 @@ This will return the response from the DUT, if any.
 ### Teardown
 
 Posting to the teardown endpoint will tear down cleanly whatever has been setup on the kit - for example it will de activate any created network hotspots.
+
+
+### Configuration
+The autokit will use dummy implementations by default. You can select which implementations to use via the `/config` endpoint:
+
+```sh
+curl -X POST <IP>/config -H 'Content-Type: application/json' -d '{<CONFIG_OPTIONS>}'
+```
+
+For example:
+
+```sh
+curl -X POST localhost/config -H 'Content-Type: application/json' -d '{"serial": "ftdi", "power": "usbrelay"}'
+```
+
+Any config options supported will not be applied. The configuration is stored in a voluem in `/data/config.json`
+
+To fetch the current config:
+
+```sh
+curl localhost/config
+```

@@ -35,6 +35,7 @@ interface Serial extends Base{
 
 // specify which peripherals are in use
 interface AutokitConfig{
+    [key: string]: string;//indexer
     power: string;
     sdMux: string;
     network: string; 
