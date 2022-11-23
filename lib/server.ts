@@ -16,6 +16,8 @@ const app = express();
 const httpServer = http.createServer(app);
 
 const CONFIG_PATH = `/data/config.json`
+let validConfig = false;
+let configErr: any = null;
 
 async function main(){
     // read configuration at startup
@@ -36,6 +38,7 @@ async function main(){
         autokitConfig = JSON.parse(readConfFile.toString());
     } catch (e){
         console.log(`No config file found - using default configuration`)
+        validConfig = true
     }
 
 
@@ -44,11 +47,11 @@ async function main(){
     try{
         autoKit = new Autokit(autokitConfig);
         await autoKit.setup();
+        validConfig = true
     }catch(e){
         console.log(`Invalid Autokit configuration, Error: ${e}`)
-        console.log(`Using default configuration instead...`)
-        autoKit = new Autokit(autokitConfigDefault);
-        await autoKit.setup();
+        configErr = e;
+        validConfig = false
     }
 
     /* Power */
@@ -217,8 +220,8 @@ async function main(){
                     tar.pack(autoKit.video.captureFolder),
                     createGzip({ level: 6 }),
                     res,
-                ).catch((error) => {
-                    throw error;
+                ).catch((err: Error) => {
+                    throw err;
                 });
                 await line;
                 res.send('OK');
@@ -280,16 +283,16 @@ async function main(){
                     autokitConfig[field] = req.body[field];
                 }
 
-
                 try{
                     autoKit = new Autokit(autokitConfig);
-                    await autoKit.setup();
-                    //write configuration to file if successful - otherwise the old configuration will remain
-                    await fs.promises.writeFile(CONFIG_PATH, JSON.stringify(autokitConfig));
-               
+                    await autoKit.setup();     
+                    configErr = null;   
+                    validConfig = true       
                 }catch(e){
-                    console.log(`Invalid Autokit configuration, Error: ${e}`);
-                    console.log(`Using previous configuration`);
+                    console.log(`Invalid Autokit configuration, ${e}`);
+                    validConfig = false
+                    configErr = e;
+                    throw e
                 }
 
                 res.send('OK');
@@ -307,7 +310,12 @@ async function main(){
             next: express.NextFunction,
         ) => {
             try {
-                res.send(autoKit.config);
+                res.send(
+                    {
+                        valid: validConfig,
+                        config: autokitConfig
+                    }
+                );
             } catch (err){
                 next(err)
             }

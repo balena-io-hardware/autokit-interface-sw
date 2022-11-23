@@ -26,15 +26,6 @@ An implementation can be added so the kit can support a new piece of hardware, b
 
 Push this container onto an Autokit host. This will start a web server on port 80 of the container. 
 
-| Environment variable |                          Values                               |
-|----------------------|---------------------------------------------------------------|
-| `POWER`              | { autokitRelay } default: autokitRelay                        |
-| `SD_MUX`             | { linuxAut, linux-gmbh, testbot-sd-mux } default: linuxAut    |
-| `NETWORK`            | { linuxNetwork } default: linuxNetwork                        |
-| `USB_BOOT_PORT`      | <PORT_NUMBER> default: 4                                      |
-| `SERIAL`             | { ftdi } default: ftdi                                        |
-
-
 If the host device is a balena device, this will mean that the server will be reachable at `https://<UUID>.balena-devices.com/`, assuming that the public URL of that device is enabled.
 
 If you ssh into the host device, you can use `localhost` as the `<IP>` in the below instructions.
