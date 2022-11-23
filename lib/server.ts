@@ -307,8 +307,22 @@ async function main(){
             next: express.NextFunction,
         ) => {
             try {
-                let readConfFile = await fs.promises.readFile(CONFIG_PATH);
-                res.send(readConfFile.toString());
+                res.send(autoKit.config);
+            } catch (err){
+                next(err)
+            }
+        },
+    );
+
+    app.get(
+        '/config/options',
+        async (
+            _req: express.Request,
+            res: express.Response,
+            next: express.NextFunction,
+        ) => {
+            try {
+                res.send(autoKit.configOptions);
             } catch (err){
                 next(err)
             }

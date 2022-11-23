@@ -8,12 +8,13 @@ import { serialImplementations } from './features/serial';
 import { flash } from './flashing'
 
 export class Autokit{
-    private config: AutokitConfig;
+    public readonly config: AutokitConfig;
     public power: Power;
     public network: Network;
     public video : Video;
     public sdMux: SdMux;
     public serial: Serial;
+    public configOptions: any;
 
     constructor(config: AutokitConfig){
         this.config = config;
@@ -22,6 +23,13 @@ export class Autokit{
         this.video = new videoImplementations[this.config.video]();
         this.sdMux = new sdMuxImplementations[this.config.sdMux]();
         this.serial = new serialImplementations[this.config.serial]();
+        this.configOptions = {
+            power: Object.keys(powerImplementations),
+            network: Object.keys(networkImplementations),
+            video: Object.keys(videoImplementations),
+            sdMux: Object.keys(sdMuxImplementations),
+            serial: Object.keys(serialImplementations),
+        }
     }
 
     async setup(){
