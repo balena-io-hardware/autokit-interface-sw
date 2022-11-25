@@ -73,6 +73,18 @@ A wired ethernet connection can be provided via:
 curl -X POST <IP>/network/createWired
 ```
 
+### Loading up an image
+
+You can upload an image to a permanent volume using the `/uploadImage` endpoint, e.g.:
+
+```sh
+~ $ curl 192.168.2.20/uploadImage -F "image=@<YOUR_IMAGE_PATH>"
+
+{"status":true,"metadata":{"fieldname":"image","originalname":"balena-cloud-my-first-fleet-raspberrypi4-64-2.106.2-v14.3.0.img","encoding":"7bit","mimetype":"application/octet-stream","destination":"/data","filename":"2d5a597b3ffa28555de51f5026e1e89b","path":"/data/2d5a597b3ffa28555de51f5026e1e89b","size":952107008}}
+```
+
+You'll get as a response the metadata and upload path that can be used in the flashing step below.
+
 ### Flashing
 
 Flashing can be performed using:
