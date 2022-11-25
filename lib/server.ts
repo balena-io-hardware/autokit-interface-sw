@@ -1,5 +1,6 @@
 import * as bodyParser from 'body-parser';
 import * as express from 'express';
+import * as multer from 'multer';
 import * as http from 'http';
 
 import { Stream } from 'stream';
@@ -12,6 +13,7 @@ import { Autokit } from '.';
 
 const jsonParser = bodyParser.json();
 const app = express();
+const upload = multer({ dest: '/data' })
 const httpServer = http.createServer(app);
 
 const autokitConfig = {
@@ -254,6 +256,28 @@ async function main(){
             }
         },
     );
+
+    app.post(
+        '/uploadImage',
+        upload.single('image'),
+        async (
+            req: express.Request,
+            res: express.Response,
+            next: express.NextFunction,
+        ) => {
+            if(!req.file) {
+                res.send({
+                    status: false,
+                    message: 'No file uploaded'
+                });
+            } else {       
+                res.send({
+                    status: true,
+                    metadata: req.file
+                });
+            }
+        }
+    )
 
     app.post(
         '/teardown',
