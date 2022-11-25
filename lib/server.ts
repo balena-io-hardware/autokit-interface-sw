@@ -285,7 +285,9 @@ async function main(){
 
                 try{
                     autoKit = new Autokit(autokitConfig);
-                    await autoKit.setup();     
+                    await autoKit.setup();
+                    // write new config to save it across restarts/reboots
+                    await fs.promises.writeFile(CONFIG_PATH, JSON.stringify(autokitConfig));     
                     configErr = null;   
                     validConfig = true       
                 }catch(e){
