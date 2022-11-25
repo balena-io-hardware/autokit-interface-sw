@@ -1,4 +1,18 @@
 - commits:
+    - subject: Add uploadImage endpoint
+      hash: 27be695c823bac1d5cb455ae11c08b03a9ee2585
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+        signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+      author: Pedro Henrique Kopper
+      nested: []
+  version: 0.2.1
+  title: ""
+  date: 2022-11-25T18:36:11.987Z
+- commits:
     - subject: Add dummy implementations
       hash: 6b1d1ccbe94e750b622a3d6635a5559f97c80b18
       body: ""
