@@ -1,4 +1,18 @@
 - commits:
+    - subject: fix wired ethernet reconnects
+      hash: 1621e65a239f1aa2d5877f571d9f8e4ca900c192
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 0.2.3
+  title: ""
+  date: 2022-11-28T09:29:21.109Z
+- commits:
     - subject: Add uploadInfo documentation
       hash: 44e5a1f54478834ee5c389080c16eab929ec517b
       body: ""
