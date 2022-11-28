@@ -10,6 +10,7 @@ const pipeline = util.promisify(Stream.pipeline);
 import { createGzip, createGunzip } from 'zlib';
 
 import { Autokit } from '.';
+import { fs } from 'mz';
 
 const jsonParser = bodyParser.json();
 const app = express();
@@ -236,6 +237,42 @@ async function main(){
             } catch (err) {
                 next(err);
             }
+        },
+    );
+
+    app.get(
+        '/video/liveStream',
+        async (
+            _req: express.Request,
+            res: express.Response,
+            next: express.NextFunction,
+        ) => {
+            res.writeHead(200, {
+                'Cache-Control': 'no-store, no-cache, must-revalidate, pre-check=0, post-check=0, max-age=0',
+                Pragma: 'no-cache',
+                Connection: 'close',
+                'Content-Type': 'multipart/x-mixed-replace; boundary=FRAME'
+            });
+            // Send a MJPEG stream of the files in autoKit.video.captureFolder
+            // Capturing must be started manually using /video/startCapture
+            const fileWatcher = fs.watch(autoKit.video.captureFolder, (event, filename) => {
+                if(!filename.endsWith('.jpg')) return;
+                fs.readFile(`${autoKit.video.captureFolder}/${filename}`, (err, data) => {
+                    if(!err) {
+                        res.write('--FRAME\r\n', 'ascii');
+                        res.write(`Content-Type: image/jpeg\r\nContent-Length: ${data.length}\r\n\r\n`, 'ascii');
+                        res.write(data, 'binary');
+                        res.write('\r\n', 'ascii');
+                    }
+                });
+            });
+            _req.on("close", function() {
+                fileWatcher.close();
+            });
+              
+            _req.on("end", function() {
+                fileWatcher.close();
+            });
         },
     );
 

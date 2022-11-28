@@ -114,16 +114,25 @@ The above instructions assume your host device is a balena device connected to b
 To start video capture from the DUT
 
 ```sh
-curl -X POST <IP>/capture/start
+curl -X POST <IP>/video/startCapture
 ```
 
 This will commence capturing until a stop command is sent:
 
 ```sh
-curl -X POST <IP>/capture/stop -o capture.tar.gz
+curl -X POST <IP>/video/stopCapture -o capture.tar.gz
 ```
 
-Which will send a `.tar.gz` archive of all captured frames as jpeg images. 
+Which will send a `.tar.gz` archive of all captured frames as JPEG images and stop capturing. 
+
+You can also watch the stream live using the `/video/liveStream` endpoint as well. 
+**Note: You MUST call `/video/startCapture` first!**
+
+```sh
+vlc http://<IP>/video/liveStream
+```
+
+Which will start showing the MJPEG encoded live stream.
 
 ### Serial
 

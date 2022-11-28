@@ -39,7 +39,7 @@ export class LinuxVideo implements Video {
 			this.proc = spawn(
 				'gst-launch-1.0',
 				[
-					`v4l2src ! decodebin ! videocrop left=90 right=90 bottom=70 top=70 ! jpegenc quality=10 ! multifilesink location="${
+					`v4l2src ! decodebin ! jpegenc quality=50 ! multifilesink location="${
 						this.captureFolder
 					}/%06d.jpg"`,
 				],
