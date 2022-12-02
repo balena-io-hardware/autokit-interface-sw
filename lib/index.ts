@@ -7,7 +7,7 @@ import { serialImplementations } from './features/serial';
 
 import { flash } from './flashing'
 
-export class Autokit{
+export class Autokit {
     private config: AutokitConfig;
     public power: Power;
     public network: Network;
@@ -15,6 +15,9 @@ export class Autokit{
     public sdMux: SdMux;
     public serial: Serial;
 
+     /**
+     * @param config - AutokitConfig object, MUST define every implementation. You can use a Dummy one if needed.
+     **/
     constructor(config: AutokitConfig){
         this.config = config;
         this.power = new powerImplementations[this.config.power]();
@@ -24,6 +27,9 @@ export class Autokit{
         this.serial = new serialImplementations[this.config.serial]();
     }
 
+    /**
+     * Initializes every implementation according to their own defined setup method.
+     **/
     async setup(){
         // TODO: for each feature, detect the implementation - then create the instance of the class
         // For now, let the user specify the hardware configuration with a json object
@@ -38,11 +44,16 @@ export class Autokit{
     }
 
 
-    // flash a DUT from a file
+    /**
+     * Flash a DUT from a file path.
+     **/
     async flash(filename: string, deviceType: string){
         await flash(filename, deviceType, this ,this.config.usbBootPort);
     }
 
+    /**
+     * Calls the teardown method on every implementation. 
+     **/
     async teardown(){
         console.log('Tearing down Autokit...')
         await this.power.teardown();
