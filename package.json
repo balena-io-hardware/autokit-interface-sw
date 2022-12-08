@@ -9,7 +9,8 @@
   "scripts": {
     "build": "npx tsc",
     "test": "echo \"No test specified\" && exit 0",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "docs": "rimraf ./docs/ && npx typedoc --tsconfig tsconfig.json"
   },
   "engines": {
     "node": ">=10.0.0 < 16"
@@ -45,6 +46,9 @@
     "@types/fs-extra": "^9.0.13",
     "@types/mz": "^2.7.4",
     "@types/tar-fs": "^2.0.1",
+    "rimraf": "^3.0.2",
+    "typedoc": "^0.23.21",
+    "typedoc-theme-hierarchy": "^3.0.0",
     "typescript": "^4.7.4"
   },
   "versionist": {
