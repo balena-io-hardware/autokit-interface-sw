@@ -1,4 +1,18 @@
 - commits:
+    - subject: Add TSDoc support
+      hash: 3d91d8647aa63a5843579e1eb7b0c337bee7650c
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+        signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+      author: Pedro Henrique Kopper
+      nested: []
+  version: 0.2.4
+  title: ""
+  date: 2022-12-08T15:03:38.713Z
+- commits:
     - subject: fix wired ethernet reconnects
       hash: 1621e65a239f1aa2d5877f571d9f8e4ca900c192
       body: ""
