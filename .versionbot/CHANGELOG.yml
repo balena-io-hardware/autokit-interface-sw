@@ -1,4 +1,18 @@
 - commits:
+    - subject: Bump minimum node version to 16
+      hash: 40d35c42ec595c2d6f734c5f3d4c03b50620c9b5
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+        signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+      author: Pedro Henrique Kopper
+      nested: []
+  version: 0.2.5
+  title: ""
+  date: 2022-12-16T15:17:39.021Z
+- commits:
     - subject: Add TSDoc support
       hash: 3d91d8647aa63a5843579e1eb7b0c337bee7650c
       body: ""
