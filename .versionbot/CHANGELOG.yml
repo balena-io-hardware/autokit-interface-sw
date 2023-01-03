@@ -1,4 +1,38 @@
 - commits:
+    - subject: add etcher pro and cm4 flashing mechaisms
+      hash: e0b66db078264baa20b874ce236844e233b491db
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+    - subject: add digital relay feature
+      hash: 8cc4ce1bdcb69d8359dd0bc4e0fef13976ad2c3b
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+    - subject: allow for usbboot + psu flashing devices like fin 1.0 or revpi3
+      hash: 9548c1b8365a3af5ae715b5ddd95fce5463a7d08
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 0.2.7
+  title: ""
+  date: 2023-01-03T16:55:41.546Z
+- commits:
     - subject: "patch: Automate docs generation using Flowzone"
       hash: e25d59353c01751f9c4fac17761849c2d9e83c8c
       body: ""

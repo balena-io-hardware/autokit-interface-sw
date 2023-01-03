@@ -1,6 +1,6 @@
 {
   "name": "autokit",
-  "version": "0.2.6",
+  "version": "0.2.7",
   "description": "",
   "main": "build/index.js",
   "files": [
@@ -52,6 +52,6 @@
     "typescript": "^4.7.4"
   },
   "versionist": {
-    "publishedAt": "2022-12-16T15:39:07.900Z"
+    "publishedAt": "2023-01-03T16:55:41.671Z"
   }
 }
