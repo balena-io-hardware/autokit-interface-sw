@@ -17,12 +17,13 @@ const upload = multer({ dest: '/data' })
 const httpServer = http.createServer(app);
 
 const autokitConfig = {
-    power: process.env.POWER || 'dummyPower',
+    power: process.env.POWER || 'autokitRelay',
     sdMux: process.env.SD_MUX || 'dummySdMux',
     network: process.env.NETWORK ||  'dummyNetwork',
     video: process.env.VIDEO || 'dummyVideo',
     usbBootPort: process.env.USB_BOOT_PORT || '4',
-    serial: process.env.SERIAL || 'dummySerial'
+    serial: process.env.SERIAL || 'dummySerial',
+    digitalRelay: process.env.DIGITAL_RELAY || 'usbRelay'
 }
 
 async function main(){
@@ -56,6 +57,39 @@ async function main(){
         ) => {
             try {
                 await autoKit.power.off();
+                res.send('OK');
+            } catch (err) {
+                next(err);
+            }
+        },
+    );
+
+
+    app.post(
+        '/digitalRelay/on',
+        async (
+            _req: express.Request,
+            res: express.Response,
+            next: express.NextFunction,
+        ) => {
+            try {
+                await autoKit.digitalRelay.on();
+                res.send('OK');
+            } catch (err) {
+                next(err);
+            }
+        },
+    );
+
+    app.post(
+        '/digitalRelay/off',
+        async (
+            _req: express.Request,
+            res: express.Response,
+            next: express.NextFunction,
+        ) => {
+            try {
+                await autoKit.digitalRelay.off();
                 res.send('OK');
             } catch (err) {
                 next(err);
@@ -297,7 +331,7 @@ async function main(){
 
     // Start server
 
-    const server = app.listen(80, () => {
+    const server = app.listen(55555, () => {
 		console.log(`Worker http listening on port 80`);
 	});
 }

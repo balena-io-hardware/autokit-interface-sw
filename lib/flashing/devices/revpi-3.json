@@ -1,4 +1,4 @@
 {
     "type": "usbboot",
-    "power": "usb"
+    "power": true
 }

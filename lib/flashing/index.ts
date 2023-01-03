@@ -106,6 +106,8 @@ async function toggleUsb(state: boolean, port: string) {
  **/
 async function flashSD(filename: string, autoKit: Autokit){
     console.log(`Entering flash method for SD card boot devices...`);
+    await autoKit.power.off();
+    await delay(1000 * 5)
     await autoKit.sdMux.toggleMux('host');
 
     // For linux, udev will provide us with a nice id.
@@ -133,14 +135,18 @@ async function checkDutPower() {
     }
 }
 
-async function flashFlasher(filename: string, autoKit: Autokit){
+async function flashFlasher(filename: string, autoKit: Autokit, jumper: boolean){
     // first flash sd
     console.log(`Entering flash method for flasher images...`);
     await flashSD(filename, autoKit);
 
-    // power on DUT
-    // first have small delay to ensure sd has toggled
-    await delay(1000 * 5);
+    // toggle to sd boot if applicable
+    if(jumper){
+        await autoKit.digitalRelay.on()
+    }
+
+    //small delay to ensure sd and jumper has toggled
+    await delay(1000 * 10);
     await autoKit.power.on();
 
     // dut will now internally flash - need to wait until we detect DUT has powered off
@@ -190,26 +196,39 @@ async function flashFlasher(filename: string, autoKit: Autokit){
     }
     console.log('Internally flashed - powering off DUT');
     // power off and toggle mux.
+    await delay(1000*10);
     await autoKit.power.off();
     await autoKit.sdMux.toggleMux('host');
+    
+    // if jumper is present, toggle out of sd boot mode
+    if(jumper){
+        await delay(1000*10)
+        await autoKit.digitalRelay.off()
+    }
+
     // add a slight delay here to avoid powering off and on too quickly
-    await delay(1000*5)
+    await delay(1000*60)
 }
 
-/**
- * Flash an image to a usbboot device, such as the balenaFin or any other Compute Module based device 
- **/
-async function flashUsbBoot(filename: string, autoKit: Autokit, port: string){
+async function flashUsbBoot(filename: string, autoKit: Autokit, port: string, power: boolean, jumper: boolean){
     console.log(`Entering flash method for USB-Boot devices...`);
 
-    await toggleUsb(false, port);
     await autoKit.power.off();
-    await delay(1000 * 8); // Wait 5s before trying to turning USB back on
+    // if applicable, switch jumper to msd mode
+    if(jumper){
+        await autoKit.digitalRelay.on()
+    } else {
+        // power on the USB - but ensure it is powered off first - this way we ensure we get the device in a fresh state
+        await toggleUsb(false, port);
+        await delay(5*1000);
+        await toggleUsb(true, port);
+    }       
 
-    // power on the USB - but ensure it is powered off first - this way we ensure we get the device in a fresh state
-    await toggleUsb(false, port);
-    await delay(2*1000);
-    await toggleUsb(true, port);
+    if(power){
+        await delay(5*1000);
+        await autoKit.power.on();
+    }
+
     // etcher-sdk (power on) usboot
     const adapters: sdk.scanner.adapters.Adapter[] = [
         new BlockDeviceAdapter({
@@ -297,10 +316,17 @@ async function flashUsbBoot(filename: string, autoKit: Autokit, port: string){
         await flashToDisk(dest, filename);
         console.log('Flashed!');
     }
-
     // put the DUT in entirely powered off state
-    await toggleUsb(false, port);
     await autoKit.power.off();
+
+    // if applicable, turn off msd mode
+    if(jumper){
+        await autoKit.digitalRelay.off()
+    } else {
+        await toggleUsb(false, port);
+        await toggleUsb(false, port);
+    }
+    await delay(10*1000);
 }
    
 /**
@@ -319,11 +345,11 @@ async function flash(filename: string, deviceType: string, autoKit: Autokit, por
             if(port === undefined){
                 throw new Error('No usb port specified!')
             }
-            await flashUsbBoot(filename, autoKit, port);
+            await flashUsbBoot(filename, autoKit, port, flashProcedure.power, flashProcedure.jumper);
             break;
         }
         case 'flasher': {
-            await flashFlasher(filename, autoKit);
+            await flashFlasher(filename, autoKit, flashProcedure.jumper);
             break;
         }
     }
