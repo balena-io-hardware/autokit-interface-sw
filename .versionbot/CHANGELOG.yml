@@ -1,4 +1,78 @@
 - commits:
+    - subject: add etcher pro and cm4 flashing mechaisms
+      hash: e0b66db078264baa20b874ce236844e233b491db
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+    - subject: add digital relay feature
+      hash: 8cc4ce1bdcb69d8359dd0bc4e0fef13976ad2c3b
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+    - subject: allow for usbboot + psu flashing devices like fin 1.0 or revpi3
+      hash: 9548c1b8365a3af5ae715b5ddd95fce5463a7d08
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 0.2.7
+  title: ""
+  date: 2023-01-03T16:55:41.546Z
+- commits:
+    - subject: "patch: Automate docs generation using Flowzone"
+      hash: e25d59353c01751f9c4fac17761849c2d9e83c8c
+      body: ""
+      footer:
+        Signed-off-by: Vipul Gupta (@vipulgupta2048) <vipul@balena.io>
+        signed-off-by: Vipul Gupta (@vipulgupta2048) <vipul@balena.io>
+      author: Vipul Gupta (@vipulgupta2048)
+      nested: []
+  version: 0.2.6
+  title: ""
+  date: 2022-12-16T15:39:07.776Z
+- commits:
+    - subject: Bump minimum node version to 16
+      hash: 40d35c42ec595c2d6f734c5f3d4c03b50620c9b5
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+        signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+      author: Pedro Henrique Kopper
+      nested: []
+  version: 0.2.5
+  title: ""
+  date: 2022-12-16T15:17:39.021Z
+- commits:
+    - subject: Add TSDoc support
+      hash: 3d91d8647aa63a5843579e1eb7b0c337bee7650c
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+        signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+      author: Pedro Henrique Kopper
+      nested: []
+  version: 0.2.4
+  title: ""
+  date: 2022-12-08T15:03:38.713Z
+- commits:
     - subject: fix wired ethernet reconnects
       hash: 1621e65a239f1aa2d5877f571d9f8e4ca900c192
       body: ""

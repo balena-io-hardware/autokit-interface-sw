@@ -10,6 +10,12 @@ interface Power extends Base{
     getState(): Promise<string>;
 }
 
+interface DigitalRelay extends Base{
+    on(voltage?: number): Promise<void>;
+    off(): Promise<void>;
+    getState(): Promise<string>;
+}
+
 interface Network extends Base{
     createWiredNetwork(): Promise<void>;
     createWirelessNetwork(ssid?: string, psk?: string): Promise<void>;
@@ -41,6 +47,7 @@ interface AutokitConfig{
     video: string;
     usbBootPort?: string;
     serial: string;
+    digitalRelay: string;
 }
 
 // utility from angular

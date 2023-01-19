@@ -11,11 +11,40 @@
     "preserveConstEnums": true,
     "declaration": true,
     "resolveJsonModule": true,
-    "target": "es2015",                                /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', or 'ESNEXT'. */
-    "module": "commonjs",                           /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
-    "outDir": "./build",                              /* Redirect output structure to the directory. */
-    "strict": true,                                 /* Enable all strict type-checking options. */                      
-    "skipLibCheck": true,                           /* Skip type checking of declaration files. */
-    "forceConsistentCasingInFileNames": true        /* Disallow inconsistently-cased references to the same file. */
+    "target": "es2015", /* Specify ECMAScript target version: 'ES3' (default), 'ES5', 'ES2015', 'ES2016', 'ES2017', 'ES2018', 'ES2019', 'ES2020', 'ES2021', or 'ESNEXT'. */
+    "module": "commonjs", /* Specify module code generation: 'none', 'commonjs', 'amd', 'system', 'umd', 'es2015', 'es2020', or 'ESNext'. */
+    "outDir": "./build", /* Redirect output structure to the directory. */
+    "strict": true, /* Enable all strict type-checking options. */
+    "skipLibCheck": true, /* Skip type checking of declaration files. */
+    "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
+  },
+  "typedocOptions": {
+    "name": "Autokit Helpers",
+    "entryPoints": [
+      "lib/features/**",
+      "lib/flashing/**",
+      "lib/interfaces.d.ts",
+      "lib/index.ts"
+    ],
+    "exclude": [
+      "**.md"
+    ],
+    "out": "docs/",
+    "includeVersion": true,
+    "searchInComments": true,
+    "titleLink": "https://github.com/balena-io-hardware/autokit-interface-sw",
+    "excludeExternals": true,
+    "excludePrivate": true,
+    "excludeProtected": true,
+    // "excludeNotDocumented": true,
+    "categorizeByGroup": true,
+    "categoryOrder": [
+      "helper",
+      "*"
+    ],
+    "plugin": [
+      "typedoc-theme-hierarchy"
+    ],
+    "theme": "hierarchy"
   }
 }

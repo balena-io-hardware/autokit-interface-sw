@@ -7,7 +7,9 @@ import { fs } from 'mz';
 import { BlockDeviceAdapter } from 'etcher-sdk/build/scanner/adapters';
 import { Autokit } from '../';
 
-// Flash an image to a disk - this is the low level function used to flash a disk (sd card, usb sotrage device etc)
+/**
+ * Flash an image to a disk - this is the low level function used to flash a disk (SD card, USD storage device etc)
+ **/
 async function flashToDisk(
     dst: sdk.sourceDestination.BlockDevice,
     src: string,
@@ -37,6 +39,7 @@ async function flashToDisk(
     }
 }
 
+
 function getDevInterface(
     devPath: string | undefined,
     timeout: retry.Options = { max_tries: 5, interval: 5000 },
@@ -55,6 +58,9 @@ function getDevInterface(
 
 }
 
+/**
+ * Gets the etcher-sdk compatible BlockDevice from a path
+ **/
 async function getDrive(
 	device: string,
 ): Promise<sdk.sourceDestination.BlockDevice> {
@@ -83,6 +89,9 @@ async function getDrive(
 	return drive;
 }
 
+/**
+ * Toggles uhubctl-compatible USB port power state
+ **/
 async function toggleUsb(state: boolean, port: string) {
     console.log(`Toggling USB ${state ? 'on' : 'off'}`);
     await exec(
@@ -92,8 +101,13 @@ async function toggleUsb(state: boolean, port: string) {
     });
 }
 
+/**
+ * Flash an image to a disk - this is the low level function used to flash a disk (SD card, USD storage device etc)
+ **/
 async function flashSD(filename: string, autoKit: Autokit){
     console.log(`Entering flash method for SD card boot devices...`);
+    await autoKit.power.off();
+    await delay(1000 * 5)
     await autoKit.sdMux.toggleMux('host');
 
     // For linux, udev will provide us with a nice id.
@@ -106,6 +120,9 @@ async function flashSD(filename: string, autoKit: Autokit){
     
 }
 
+/**
+ * Checks whether the DUT is powered using Ethernet carrier detection
+ **/
 async function checkDutPower() {
     const [stdout, _stderr] = await exec(`cat /sys/class/net/eth1/carrier`);
     const file = stdout.toString();
@@ -118,14 +135,18 @@ async function checkDutPower() {
     }
 }
 
-async function flashFlasher(filename: string, autoKit: Autokit){
+async function flashFlasher(filename: string, autoKit: Autokit, jumper: boolean){
     // first flash sd
     console.log(`Entering flash method for flasher images...`);
     await flashSD(filename, autoKit);
 
-    // power on DUT
-    // first have small delay to ensure sd has toggled
-    await delay(1000 * 5);
+    // toggle to sd boot if applicable
+    if(jumper){
+        await autoKit.digitalRelay.on()
+    }
+
+    //small delay to ensure sd and jumper has toggled
+    await delay(1000 * 10);
     await autoKit.power.on();
 
     // dut will now internally flash - need to wait until we detect DUT has powered off
@@ -175,118 +196,143 @@ async function flashFlasher(filename: string, autoKit: Autokit){
     }
     console.log('Internally flashed - powering off DUT');
     // power off and toggle mux.
+    await delay(1000*10);
     await autoKit.power.off();
     await autoKit.sdMux.toggleMux('host');
+    
+    // if jumper is present, toggle out of sd boot mode
+    if(jumper){
+        await delay(1000*10)
+        await autoKit.digitalRelay.off()
+    }
+
     // add a slight delay here to avoid powering off and on too quickly
-    await delay(1000*5)
+    await delay(1000*60)
 }
 
-async function flashUsbBoot(filename: string, autoKit: Autokit, port: string){
-        console.log(`Entering flash method for USB-Boot devices...`);
+async function flashUsbBoot(filename: string, autoKit: Autokit, port: string, power: boolean, jumper: boolean){
+    console.log(`Entering flash method for USB-Boot devices...`);
 
-        await toggleUsb(false, port);
-        await autoKit.power.off();
-        await delay(1000 * 8); // Wait 5s before trying to turning USB back on
-
+    await autoKit.power.off();
+    // if applicable, switch jumper to msd mode
+    if(jumper){
+        await autoKit.digitalRelay.on()
+    } else {
         // power on the USB - but ensure it is powered off first - this way we ensure we get the device in a fresh state
         await toggleUsb(false, port);
-        await delay(2*1000);
+        await delay(5*1000);
         await toggleUsb(true, port);
-        // etcher-sdk (power on) usboot
-        const adapters: sdk.scanner.adapters.Adapter[] = [
-            new BlockDeviceAdapter({
-                includeSystemDrives: () => false,
-                unmountOnSuccess: false,
-                write: true,
-                direct: true,
-            }),
-            new sdk.scanner.adapters.UsbbootDeviceAdapter(),
-        ];
-        const deviceScanner = new sdk.scanner.Scanner(adapters);
-        console.log('Waiting for compute module');
-        // Wait for compute module to appear over usb
-        const computeModule: sdk.sourceDestination.UsbbootDrive = await new Promise(
-            (resolve, reject) => {
-                function onAttach(
-                    drive: sdk.scanner.adapters.AdapterSourceDestination,
-                ) {
-                    if (drive instanceof sdk.sourceDestination.UsbbootDrive) {
-                        deviceScanner.removeListener('attach', onAttach);
-                        resolve(drive);
-                    }
-                }
-                deviceScanner.on('attach', onAttach);
-                deviceScanner.on('error', reject);
-                deviceScanner.start();
-            },
-        );
-        console.log('Compute module attached');
-        // wait to convert to block device.
-        await new Promise<void>((resolve, reject) => {
-            function onDetach(
+    }       
+
+    if(power){
+        await delay(5*1000);
+        await autoKit.power.on();
+    }
+
+    // etcher-sdk (power on) usboot
+    const adapters: sdk.scanner.adapters.Adapter[] = [
+        new BlockDeviceAdapter({
+            includeSystemDrives: () => false,
+            unmountOnSuccess: false,
+            write: true,
+            direct: true,
+        }),
+        new sdk.scanner.adapters.UsbbootDeviceAdapter(),
+    ];
+    const deviceScanner = new sdk.scanner.Scanner(adapters);
+    console.log('Waiting for compute module');
+    // Wait for compute module to appear over usb
+    const computeModule: sdk.sourceDestination.UsbbootDrive = await new Promise(
+        (resolve, reject) => {
+            function onAttach(
                 drive: sdk.scanner.adapters.AdapterSourceDestination,
             ) {
-                if (drive === computeModule) {
-                    deviceScanner.removeListener('detach', onDetach);
-                    resolve();
+                if (drive instanceof sdk.sourceDestination.UsbbootDrive) {
+                    deviceScanner.removeListener('attach', onAttach);
+                    resolve(drive);
                 }
             }
-            deviceScanner.on('detach', onDetach);
+            deviceScanner.on('attach', onAttach);
             deviceScanner.on('error', reject);
-        });
-
-        // start a timeout - if the fin takes too long to appear as a block device, we must retry from the beginning
-
-        console.log('Waiting for compute module to reattach as a block device');
-
-        // let reAttachFail = false;
-        const dest = await new Promise(
-            (
-                resolve: (drive: sdk.sourceDestination.BlockDevice) => void,
-                reject,
-            ) => {
-                const timeout = setTimeout(() => {
-                    clearTimeout(timeout);
-                    console.log(`Timed out!`);
-                    reject();
-                }, 1000 * 60 * 5);
-
-                function onAttach(
-                    drive: sdk.scanner.adapters.AdapterSourceDestination,
-                ) {
-                    if (
-                        drive instanceof sdk.sourceDestination.BlockDevice &&
-                        drive.description === 'Compute Module'
-                    ) {
-                        console.log('Attached compute module.');
-                        clearTimeout(timeout);
-                        resolve(drive);
-                        deviceScanner.removeListener('attach', onAttach);
-                    }
-                }
-                deviceScanner.on('attach', onAttach);
-                deviceScanner.on('error', reject);
-            },
-        ).catch(() => {
-            console.log(`Caught promise reject`);
-            // reAttachFail = true
-        });
-        deviceScanner.stop();
-
-        if (dest instanceof Object) {
-            await delay(1000); // Wait 1s before trying to flash
-            console.log('Flashing started...');
-            await flashToDisk(dest, filename);
-            console.log('Flashed!');
+            deviceScanner.start();
+        },
+    );
+    console.log('Compute module attached');
+    // wait to convert to block device.
+    await new Promise<void>((resolve, reject) => {
+        function onDetach(
+            drive: sdk.scanner.adapters.AdapterSourceDestination,
+        ) {
+            if (drive === computeModule) {
+                deviceScanner.removeListener('detach', onDetach);
+                resolve();
+            }
         }
+        deviceScanner.on('detach', onDetach);
+        deviceScanner.on('error', reject);
+    });
 
-        // put the DUT in entirely powered off state
-        await toggleUsb(false, port);
-        await autoKit.power.off();
+    // start a timeout - if the fin takes too long to appear as a block device, we must retry from the beginning
+
+    console.log('Waiting for compute module to reattach as a block device');
+
+    // let reAttachFail = false;
+    const dest = await new Promise(
+        (
+            resolve: (drive: sdk.sourceDestination.BlockDevice) => void,
+            reject,
+        ) => {
+            const timeout = setTimeout(() => {
+                clearTimeout(timeout);
+                console.log(`Timed out!`);
+                reject();
+            }, 1000 * 60 * 5);
+
+            function onAttach(
+                drive: sdk.scanner.adapters.AdapterSourceDestination,
+            ) {
+                if (
+                    drive instanceof sdk.sourceDestination.BlockDevice &&
+                    drive.description === 'Compute Module'
+                ) {
+                    console.log('Attached compute module.');
+                    clearTimeout(timeout);
+                    resolve(drive);
+                    deviceScanner.removeListener('attach', onAttach);
+                }
+            }
+            deviceScanner.on('attach', onAttach);
+            deviceScanner.on('error', reject);
+        },
+    ).catch(() => {
+        console.log(`Caught promise reject`);
+        // reAttachFail = true
+    });
+    deviceScanner.stop();
+
+    if (dest instanceof Object) {
+        await delay(1000); // Wait 1s before trying to flash
+        console.log('Flashing started...');
+        await flashToDisk(dest, filename);
+        console.log('Flashed!');
     }
+    // put the DUT in entirely powered off state
+    await autoKit.power.off();
+
+    // if applicable, turn off msd mode
+    if(jumper){
+        await autoKit.digitalRelay.off()
+    } else {
+        await toggleUsb(false, port);
+        await toggleUsb(false, port);
+    }
+    await delay(10*1000);
+}
    
-
-
+/**
+ * 
+ * Flash a given device type, automatically selecting the corresponding flashing method
+ */
 async function flash(filename: string, deviceType: string, autoKit: Autokit, port?: string){
     const flashProcedure = await import(`${__dirname}/devices/${deviceType}.json`);
     console.log(flashProcedure)
@@ -299,11 +345,11 @@ async function flash(filename: string, deviceType: string, autoKit: Autokit, por
             if(port === undefined){
                 throw new Error('No usb port specified!')
             }
-            await flashUsbBoot(filename, autoKit, port);
+            await flashUsbBoot(filename, autoKit, port, flashProcedure.power, flashProcedure.jumper);
             break;
         }
         case 'flasher': {
-            await flashFlasher(filename, autoKit);
+            await flashFlasher(filename, autoKit, flashProcedure.jumper);
             break;
         }
     }

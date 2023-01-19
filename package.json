@@ -1,6 +1,6 @@
 {
   "name": "autokit",
-  "version": "0.2.3",
+  "version": "0.2.7",
   "description": "",
   "main": "build/index.js",
   "files": [
@@ -9,17 +9,18 @@
   "scripts": {
     "build": "npx tsc",
     "test": "echo \"No test specified\" && exit 0",
-    "prepack": "npm run build"
+    "prepack": "npm run build",
+    "doc": "rimraf ./docs/ && npx typedoc --tsconfig tsconfig.json && touch docs/.nojekyll"
   },
   "engines": {
-    "node": ">=10.0.0 < 16"
+    "node": ">=16.0.0 < 19"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "@balena/testbot": "^1.9.18",
-    "@balena/usbrelay": "^0.1.2",
     "@types/multer": "^1.4.7",
+    "@balena/usbrelay": "^0.1.4",
     "bluebird": "^3.7.2",
     "bluebird-retry": "^0.11.0",
     "body-parser": "^1.20.0",
@@ -32,11 +33,11 @@
     "lshw": "^1.6.1",
     "multer": "^1.4.5-lts.1",
     "mz": "^2.7.0",
+    "node-hid": "^2.1.2",
     "npm": "^8.15.1",
     "serialport": "^10.4.0",
     "tap": "^16.3.0",
-    "tar-fs": "^2.1.1",
-    "tsc": "^2.0.4"
+    "tar-fs": "^2.1.1"
   },
   "devDependencies": {
     "@types/bluebird": "^3.5.36",
@@ -45,9 +46,12 @@
     "@types/fs-extra": "^9.0.13",
     "@types/mz": "^2.7.4",
     "@types/tar-fs": "^2.0.1",
+    "rimraf": "^3.0.2",
+    "typedoc": "^0.23.21",
+    "typedoc-theme-hierarchy": "^3.0.0",
     "typescript": "^4.7.4"
   },
   "versionist": {
-    "publishedAt": "2022-11-28T09:29:21.246Z"
+    "publishedAt": "2023-01-03T16:55:41.671Z"
   }
 }

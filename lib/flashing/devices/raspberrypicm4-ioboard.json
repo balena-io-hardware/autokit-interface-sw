@@ -1,0 +1,5 @@
+{
+    "type": "usbboot",
+    "power": true,
+    "jumper": true
+}
