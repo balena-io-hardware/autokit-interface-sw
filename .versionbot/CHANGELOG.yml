@@ -1,4 +1,18 @@
 - commits:
+    - subject: Strip npm package from web server
+      hash: 7ee5764e909c1cb9cb6c05e340deefda25d36e1e
+      body: ""
+      footer:
+        Change-type: major
+        change-type: major
+        Signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+        signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+      author: Pedro Henrique Kopper
+      nested: []
+  version: 1.0.0
+  title: ""
+  date: 2023-01-19T14:28:54.026Z
+- commits:
     - subject: add etcher pro and cm4 flashing mechaisms
       hash: e0b66db078264baa20b874ce236844e233b491db
       body: ""
