@@ -1,4 +1,18 @@
 - commits:
+    - subject: separate serial read and write
+      hash: 664354d038d1e133f8f18ae9fe91a5b18564f5fe
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.2
+  title: ""
+  date: 2023-01-20T11:51:35.658Z
+- commits:
     - subject: "patch: bring autokit package to balena scope"
       hash: 34cdad3a8ca1abe80fc6576145a00f6d065ce860
       body: ""
