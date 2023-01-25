@@ -5,7 +5,7 @@ import * as retry from 'bluebird-retry';
 import * as sdk from 'etcher-sdk';
 import { fs } from 'mz';
 import { BlockDeviceAdapter } from 'etcher-sdk/build/scanner/adapters';
-import { Autokit } from '../';
+import { Autokit } from '../..';
 
 /**
  * Flash an image to a disk - this is the low level function used to flash a disk (SD card, USD storage device etc)
@@ -107,6 +107,7 @@ async function toggleUsb(state: boolean, port: string) {
 async function flashSD(filename: string, autoKit: Autokit){
     console.log(`Entering flash method for SD card boot devices...`);
     await autoKit.power.off();
+    //
     await delay(1000 * 5)
     await autoKit.sdMux.toggleMux('host');
 
@@ -333,10 +334,8 @@ async function flashUsbBoot(filename: string, autoKit: Autokit, port: string, po
  * 
  * Flash a given device type, automatically selecting the corresponding flashing method
  */
-async function flash(filename: string, deviceType: string, autoKit: Autokit, port?: string){
-    const flashProcedure = await import(`${__dirname}/devices/${deviceType}.json`);
-    console.log(flashProcedure)
-    switch(flashProcedure.type){
+async function flash(filename: string, method: Method, autoKit: Autokit){
+    switch(method.type){
         case 'sd': {
             await flashSD(filename, autoKit);
             break;
@@ -345,14 +344,20 @@ async function flash(filename: string, deviceType: string, autoKit: Autokit, por
             if(port === undefined){
                 throw new Error('No usb port specified!')
             }
-            await flashUsbBoot(filename, autoKit, port, flashProcedure.power, flashProcedure.jumper);
+            await flashUsbBoot(filename, autoKit, port, method.power, method.jumper);
             break;
         }
         case 'flasher': {
-            await flashFlasher(filename, autoKit, flashProcedure.jumper);
+            await flashFlasher(filename, autoKit, method.jumper);
             break;
         }
     }
 }
 
-export { flash }
+interface Method {
+    type: string,
+    jumper: boolean,
+    power: boolean
+}
+
+export { flash, Method }

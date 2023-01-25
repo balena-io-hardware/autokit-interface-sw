@@ -1,0 +1,7 @@
+{
+    "name":"autoKit",
+    "ports": [
+        { "C0": "/sys/bus/usb/devices/3-1"},
+        { "C1" : ""}
+    ]
+}
