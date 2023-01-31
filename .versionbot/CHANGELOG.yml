@@ -1,4 +1,18 @@
 - commits:
+    - subject: Update README and logo
+      hash: 34b2eb2fec9b0956e2080cb40ea115db68695298
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+        signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+      author: Pedro Henrique Kopper
+      nested: []
+  version: 1.0.3
+  title: ""
+  date: 2023-01-31T19:51:15.695Z
+- commits:
     - subject: separate serial read and write
       hash: 664354d038d1e133f8f18ae9fe91a5b18564f5fe
       body: ""
