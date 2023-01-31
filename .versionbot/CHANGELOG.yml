@@ -1,4 +1,18 @@
 - commits:
+    - subject: Fix docs script name
+      hash: 10d382c7ed86e0e874c40859ec4ef12f94b47cb4
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+        signed-off-by: Pedro Henrique Kopper <pedro.kopper@balena.io>
+      author: Pedro Henrique Kopper
+      nested: []
+  version: 1.0.4
+  title: ""
+  date: 2023-01-31T20:38:22.661Z
+- commits:
     - subject: Update README and logo
       hash: 34b2eb2fec9b0956e2080cb40ea115db68695298
       body: ""
