@@ -19,7 +19,7 @@
     "forceConsistentCasingInFileNames": true /* Disallow inconsistently-cased references to the same file. */
   },
   "typedocOptions": {
-    "name": "Autokit Helpers",
+    "name": "AutoKit Node Package",
     "entryPoints": [
       "lib/features/**",
       "lib/flashing/**",
@@ -32,11 +32,9 @@
     "out": "docs/",
     "includeVersion": true,
     "searchInComments": true,
-    "titleLink": "https://github.com/balena-io-hardware/autokit-interface-sw",
     "excludeExternals": true,
     "excludePrivate": true,
     "excludeProtected": true,
-    // "excludeNotDocumented": true,
     "categorizeByGroup": true,
     "categoryOrder": [
       "helper",

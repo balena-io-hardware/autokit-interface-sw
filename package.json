@@ -14,7 +14,7 @@
     "build": "npx tsc",
     "test": "echo \"No test specified\" && exit 0",
     "prepack": "npm run build",
-    "doc": "rimraf ./docs/ && npx typedoc --tsconfig tsconfig.json && touch docs/.nojekyll"
+    "docs": "rimraf ./docs/ && npx typedoc --tsconfig tsconfig.json && touch docs/.nojekyll"
   },
   "engines": {
     "node": ">=16.0.0 < 19"
