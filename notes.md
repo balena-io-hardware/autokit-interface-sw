@@ -38,3 +38,8 @@ map.json for storing the mapping from logical port addresses to Linux ones, e.g.
 We can the use udev to detect device info `udevadm info /sys/bus/usb/devices/3-1`
 
 Or we could use udev rules to create symlinks on the fly, if that's supported by balenaOS https://stackoverflow.com/questions/4800099/how-to-identify-multiple-usb-serial-adapters-under-ubuntu-10-1
+
+
+## How does something that uses the autokit, e.g os tests/leviathan, perform simple actions like "power on" - without having to know the addresses of the nodes???
+
+- from script -> autokit.functions[] 

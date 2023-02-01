@@ -9,13 +9,43 @@ import { digitalRelayNodes } from './functions/digitalRelay';
 export { Utils } from './utils';
 
 export class Autokit {
-    private config: AutokitConfig;
-    public power: Power;
-    public network: Network;
-    public video : Video;
-    public sdMux: SdMux;
-    public serial: Serial;
-    public digitalRelay: DigitalRelay;
+   
+    private nodes: any
+
+
+    // setup
+    async init(){
+        // function to populate node tree - pedros udev rules thing?
+        /*
+            1. add giant udev rule
+            2. run pedros script to fetch json object of tree https://github.com/cheery/node-udev
+            3. for each object in the tree, create an instance of the node class??
+                3.1 for the following tree: 
+                {
+                    3-1: {usbRelay}
+                    3-2: {sdMux}
+                    3-3: {usbRelay}
+                }
+
+                autokit.nodes.C1 = new Nodes[usbRelay]()
+
+                class UsbRelay implements Power {
+                    async on()
+                    async off()
+                }
+
+                interface Power extends Node {
+                    on()
+                    off()
+                }
+
+                interface Node {
+                    id: string
+                    ...
+                    ...
+                }
+        */
+    }
 
     /*
     Autokit: {
@@ -41,7 +71,73 @@ export class Autokit {
         }
     }
 
-    Autokit.functions.nodes.C1?.powerOn()
+
+    Autokit: {
+            nodes: [
+                C2: {
+                    status: "connected",
+                    type: "autokitRelay"
+                    function: "relay"
+                },
+                C4: {
+                    status: "connected",
+                    type: "autokitRelay"
+                    function: "relay"
+                },
+                C3: {
+                    status: "disconnected",
+                    type: autoKitSdMux
+                    function: "sdMux"
+                }
+            ]    
+        }
+    }
+
+    AutoKit.functions.nodes.C1?.powerOn()
+    AutoKit.utils.powerOn(){
+        autoKit.nodes.power.on() // C1 always power 
+    }
+    
+    // user wanted to toggle the other relay they had connected (they plugged it into C5 - so they know its there)
+    autoKit.nodes[defaults.power].power.on()
+
+
+    defaults {
+        mainsPower: C1,
+        sdMux: C2, 
+        video: C3,
+        ethernet: C4
+    }
+
+    // on order without sd mux
+    defaults {
+        mainsPower: C1,
+        uhubctl: C2, 
+        video: C3,
+        ethernet: C4
+    }
+
+    // on order with digital relay (toggle boot select pins)
+    defaults {
+        mainsPower: C1,
+        sdMux: C2, 
+        video: C3,
+        ethernet: C4,
+        bootSelect: C5
+    }
+
+    utils.powerOn(method){
+        switch(method):
+            case(mains):
+                autoKit.nodes[defaults.power].power.on()
+            case(usbboot):
+                autoKit.nodes[defaults.uhubctl].power.on()
+                autoKit.nodes[defaults.power].power.on()
+            case(button):
+                autoKit.nodes[defaults.bootSelect].toggle.on()
+               
+    }
+        
     */
 
 
