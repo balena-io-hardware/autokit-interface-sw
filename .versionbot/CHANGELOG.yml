@@ -1,4 +1,18 @@
 - commits:
+    - subject: bump etcher-sdk to 7.4.8
+      hash: 7096f2c9bd16fe476786a04a35058074cc095e7b
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.5
+  title: ""
+  date: 2023-02-01T16:03:00.152Z
+- commits:
     - subject: Fix docs script name
       hash: 10d382c7ed86e0e874c40859ec4ef12f94b47cb4
       body: ""
