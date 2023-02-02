@@ -1,4 +1,28 @@
 - commits:
+    - subject: remove deploy to balena
+      hash: a6956d5d320fcf5e80a8c47148bc2da118501e7a
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+    - subject: remove unused file
+      hash: 8a12ec156c33fbc7923164654c71cc9c985b7c0c
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.6
+  title: ""
+  date: 2023-02-02T09:13:40.346Z
+- commits:
     - subject: bump etcher-sdk to 7.4.8
       hash: 7096f2c9bd16fe476786a04a35058074cc095e7b
       body: ""
