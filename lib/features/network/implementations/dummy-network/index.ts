@@ -1,6 +1,8 @@
 const debug = require("debug")("autokit:DummyNetwork");
 
 export class DummyNetwork implements Network {
+    public wirelessIface = '';
+    public wiredIface = '';
     constructor() {
     }
 

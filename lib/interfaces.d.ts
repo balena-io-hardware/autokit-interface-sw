@@ -17,6 +17,8 @@ interface DigitalRelay extends Base{
 }
 
 interface Network extends Base{
+    wiredIface: string;
+    wirelessIface: string;
     createWiredNetwork(): Promise<void>;
     createWirelessNetwork(ssid?: string, psk?: string): Promise<void>;
 }
