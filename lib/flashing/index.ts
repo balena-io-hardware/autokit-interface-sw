@@ -321,8 +321,11 @@ async function flashUsbBoot(filename: string, autoKit: Autokit, port: string, po
 
     // if applicable, turn off msd mode
     if(jumper){
-        await delay(1000*10)
         await autoKit.digitalRelay.off()
+        await delay(1000*10)
+        await autoKit.power.on();
+        await delay(1000*5)
+        await autoKit.power.off();
     } else {
         await toggleUsb(false, port);
         await toggleUsb(false, port);
