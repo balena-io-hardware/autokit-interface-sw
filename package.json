@@ -22,7 +22,6 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "@balena/testbot": "^1.9.18",
     "@types/multer": "^1.4.7",
     "@balena/usbrelay": "^0.1.4",
     "bluebird": "^3.7.2",
