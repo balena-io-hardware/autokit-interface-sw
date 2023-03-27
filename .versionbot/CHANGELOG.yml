@@ -1,4 +1,18 @@
 - commits:
+    - subject: remove testbot sdk
+      hash: 5cdd0a5baac7946440d140c349dca3af55dd5b56
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.7
+  title: ""
+  date: 2023-03-27T13:33:01.631Z
+- commits:
     - subject: remove deploy to balena
       hash: a6956d5d320fcf5e80a8c47148bc2da118501e7a
       body: ""
