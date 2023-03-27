@@ -123,8 +123,8 @@ async function flashSD(filename: string, autoKit: Autokit){
 /**
  * Checks whether the DUT is powered using Ethernet carrier detection
  **/
-async function checkDutPower() {
-    const [stdout, _stderr] = await exec(`cat /sys/class/net/eth1/carrier`);
+async function checkDutPower(autoKit:Autokit) {
+    const [stdout, _stderr] = await exec(`cat /sys/class/net/${autoKit.network.wiredIface}/carrier`);
     const file = stdout.toString();
     if (file.includes('1')) {
         console.log(`DUT is currently On`);
@@ -156,7 +156,7 @@ async function flashFlasher(filename: string, autoKit: Autokit, jumper: boolean)
     let dutOn = false;
     while (!dutOn) {
         console.log(`waiting for DUT to be on`);
-        dutOn = await checkDutPower();
+        dutOn = await checkDutPower(autoKit);
         await delay(1000 * 5); // 5 seconds between checks
     }
     // once we confirmed the DUT is on, we wait for it to power down again, which signals the flashing has finished
@@ -169,14 +169,14 @@ async function flashFlasher(filename: string, autoKit: Autokit, jumper: boolean)
     while (dutOn) {
         await delay(1000 * 10); // 10 seconds between checks
         console.log(`waiting for DUT to be off`);
-        dutOn = await checkDutPower();
+        dutOn = await checkDutPower(autoKit);
         // occasionally the DUT might appear to be powered down, but it isn't - we want to confirm that the DUT has stayed off for an interval of time
         if (!dutOn) {
             let offCount = 0;
             console.log(`detected DUT has powered off - confirming...`);
             for (let tries = 0; tries < POLL_TRIES; tries++) {
                 await delay(POLL_INTERVAL);
-                dutOn = await checkDutPower();
+                dutOn = await checkDutPower(autoKit);
                 if (!dutOn) {
                     offCount += 1;
                 }
