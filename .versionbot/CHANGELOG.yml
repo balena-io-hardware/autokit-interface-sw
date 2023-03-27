@@ -1,4 +1,18 @@
 - commits:
+    - subject: remove hard coded eth1 interface
+      hash: 61fa3c73ad3a17e56b61135b4c425b11eeee90d7
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.8
+  title: ""
+  date: 2023-03-27T14:56:36.835Z
+- commits:
     - subject: remove testbot sdk
       hash: 5cdd0a5baac7946440d140c349dca3af55dd5b56
       body: ""
