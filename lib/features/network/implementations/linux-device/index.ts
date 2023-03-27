@@ -6,8 +6,8 @@ const execAsync = promisify(exec);
 
 export class LinuxNetwork implements Network{
     private networkManager: NetworkManager;
-    private wirelessIface = '';
-    private wiredIface = '';
+    public wirelessIface = '';
+    public wiredIface = '';
     constructor(){
         this.networkManager = new NetworkManager()
     }
