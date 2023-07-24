@@ -107,6 +107,8 @@ async function toggleUsb(state: boolean, port: string) {
 async function flashSD(filename: string, autoKit: Autokit){
     console.log(`Entering flash method for SD card boot devices...`);
     await autoKit.power.off();
+    // ensure DUT is actually off - in case there is a capacitor that leaves it on for a period of time after powering off the relay
+    await waitForDutOff(autoKit, TIMEOUT);
     await delay(1000 * 5)
     await autoKit.sdMux.toggleMux('host');
 
@@ -132,6 +134,47 @@ async function checkDutPower(autoKit:Autokit) {
     } else {
         console.log(`DUT is currently Off`);
         return false;
+    }
+}
+
+const TIMEOUT = Number(process.env.POWEROFF_TIMEOUT) || 1000*60*5
+async function waitForDutOff(autoKit:Autokit, timeout: number){
+    const POLL_INTERVAL = 1000; // 1 second - interval between when making sure DUT has stayed off after detecting a poweroff
+    const POLL_TRIES = 20; // 20 tries - how many tries to check DUT has stayed off after detecting a poweroff
+    const DELAY = 1000*10; // 10 seconds - interval between checks
+    const TIMEOUT_COUNT = Math.ceil(timeout/DELAY); // how many times to check
+    console.log(`waiting for DUT to be off - timeout period is ${timeout/1000}s`);
+    let dutOn = await checkDutPower(autoKit);
+    let attempt = 0;
+    while (dutOn) {
+        dutOn = await checkDutPower(autoKit);
+        if (!dutOn) {
+            await delay(1000 * 10); // 10 seconds between checks
+            // occasionally the DUT might appear to be powered down, but it isn't - we want to confirm that the DUT has stayed off for an interval of time
+            let offCount = 0;
+            console.log(`detected DUT has powered off - confirming...`);
+            for (let tries = 0; tries < POLL_TRIES; tries++) {
+                await delay(POLL_INTERVAL);
+                dutOn = await checkDutPower(autoKit);
+                if (!dutOn) {
+                    offCount += 1;
+                }
+            }
+            console.log(
+                `DUT stayed off for ${offCount} checks, expected: ${POLL_TRIES}`,
+            );
+            if (offCount !== POLL_TRIES) {
+                // if the DUT didn't stay off, then we must try the loop again
+                console.log(
+                    `DUT didn't stay off for required interval - re-checking...`,
+                );
+                dutOn = true;
+            }
+        }
+        attempt += 1;
+        if (attempt === TIMEOUT_COUNT){
+            throw new Error(`Timed out while waiting for DUT to be off!`)
+        }
     }
 }
 
@@ -161,39 +204,8 @@ async function flashFlasher(filename: string, autoKit: Autokit, jumper: boolean)
     }
     // once we confirmed the DUT is on, we wait for it to power down again, which signals the flashing has finished
     // wait initially for 60s and then every 10s before checking if the board performed a shutdown after flashing the internal storage
-    const POLL_INTERVAL = 1000; // 1 second
-    const POLL_TRIES = 20; // 20 tries
-    const TIMEOUT_COUNT = 30;
-    let attempt = 0;
     await delay(1000 * 60);
-    while (dutOn) {
-        await delay(1000 * 10); // 10 seconds between checks
-        console.log(`waiting for DUT to be off`);
-        dutOn = await checkDutPower(autoKit);
-        // occasionally the DUT might appear to be powered down, but it isn't - we want to confirm that the DUT has stayed off for an interval of time
-        if (!dutOn) {
-            let offCount = 0;
-            console.log(`detected DUT has powered off - confirming...`);
-            for (let tries = 0; tries < POLL_TRIES; tries++) {
-                await delay(POLL_INTERVAL);
-                dutOn = await checkDutPower(autoKit);
-                if (!dutOn) {
-                    offCount += 1;
-                }
-            }
-            console.log(
-                `DUT stayted off for ${offCount} checks, expected: ${POLL_TRIES}`,
-            );
-            if (offCount !== POLL_TRIES) {
-                // if the DUT didn't stay off, then we must try the loop again
-                dutOn = true;
-            }
-        }
-        attempt += 1;
-        if (attempt === TIMEOUT_COUNT){
-            throw new Error(`Timed out while trying to flash internal storage!!`)
-        }
-    }
+    await waitForDutOff(autoKit, TIMEOUT);
     console.log('Internally flashed - powering off DUT');
     // power off and toggle mux.
     await delay(1000*10);
@@ -214,6 +226,9 @@ async function flashUsbBoot(filename: string, autoKit: Autokit, port: string, po
     console.log(`Entering flash method for USB-Boot devices...`);
 
     await autoKit.power.off();
+    // ensure DUT is actually off - in case there is a capacitor that leaves it on for a period of time after powering off the relay
+    await waitForDutOff(autoKit, TIMEOUT);
+    
     // if applicable, switch jumper to msd mode
     if(jumper){
         await autoKit.digitalRelay.on()
@@ -318,6 +333,8 @@ async function flashUsbBoot(filename: string, autoKit: Autokit, port: string, po
     }
     // put the DUT in entirely powered off state
     await autoKit.power.off();
+    // ensure DUT is actually off - in case there is a capacitor that leaves it on for a period of time after powering off the relay
+    await waitForDutOff(autoKit, TIMEOUT);
 
     // if applicable, turn off msd mode
     if(jumper){
