@@ -1,4 +1,18 @@
 - commits:
+    - subject: add sdwire to implementation list
+      hash: f848aa13648f20917f2ad9747019a8b96ce9864b
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.10
+  title: ""
+  date: 2023-08-29T14:53:31.778Z
+- commits:
     - subject: add sdwire mux
       hash: 96375eac5e4cc48f4903a47e9d085994a4a19cb0
       body: ""
