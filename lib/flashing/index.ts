@@ -136,6 +136,10 @@ async function checkDutPower(autoKit:Autokit) {
 }
 
 async function flashFlasher(filename: string, autoKit: Autokit, jumper: boolean){
+    // this delay is how long to wait after internal flashing before trying to re power the board. For the case where devices have capacitors that
+    // take time to drain
+    const powerOnDelay = Number(process.env.CAP_DELAY) || 1000*60;
+
     // first flash sd
     console.log(`Entering flash method for flasher images...`);
     await flashSD(filename, autoKit);
@@ -207,10 +211,14 @@ async function flashFlasher(filename: string, autoKit: Autokit, jumper: boolean)
     }
 
     // add a slight delay here to avoid powering off and on too quickly
-    await delay(1000*60)
+    await delay(powerOnDelay)
 }
 
 async function flashUsbBoot(filename: string, autoKit: Autokit, port: string, power: boolean, jumper: boolean){
+     // this delay is how long to wait after internal flashing before trying to re power the board. For the case where devices have capacitors that
+    // take time to drain
+    const powerOnDelay = Number(process.env.CAP_DELAY) || 1000*60;
+    
     console.log(`Entering flash method for USB-Boot devices...`);
 
     await autoKit.power.off();
@@ -326,7 +334,7 @@ async function flashUsbBoot(filename: string, autoKit: Autokit, port: string, po
         await toggleUsb(false, port);
         await toggleUsb(false, port);
     }
-    await delay(10*1000);
+    await delay(powerOnDelay);
 }
    
 /**
