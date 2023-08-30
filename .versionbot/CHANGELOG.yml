@@ -1,4 +1,28 @@
 - commits:
+    - subject: allow configurable NC on digitalRelay
+      hash: eaf365e236344015b61a13b01c76362638d99da8
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+    - subject: configurable delay after flasher image shutdown
+      hash: 6c715238783a9f5d381fef7b3258409d28c2a6f6
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.11
+  title: ""
+  date: 2023-08-30T13:51:10.306Z
+- commits:
     - subject: add sdwire to implementation list
       hash: f848aa13648f20917f2ad9747019a8b96ce9864b
       body: ""
