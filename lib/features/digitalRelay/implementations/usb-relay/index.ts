@@ -3,6 +3,7 @@ const USBRelay = require("@balena/usbrelay");
 export class DigitalUSBRelay implements DigitalRelay {
     private relayId: string
     private digitalRelay: any
+    private conn: boolean
     constructor(){
         this.relayId = process.env.DIGITAL_RELAY_SERIAL || '959BI'
         let relays = USBRelay.Relays 
@@ -14,6 +15,7 @@ export class DigitalUSBRelay implements DigitalRelay {
                 this.digitalRelay = new USBRelay(relay.devicePath);
             }
         }
+        this.conn = (process.env.USB_RELAY_CONN === 'NC') ? false: true // if the user specifies they have set up the connection to be NC
     }
 
     async setup(): Promise<void> {
@@ -23,13 +25,13 @@ export class DigitalUSBRelay implements DigitalRelay {
     // Power on the DUT
     async on(): Promise<void> {
         console.log(`Toggling digital relay on`)
-        await this.digitalRelay.setState(1, true);
+        await this.digitalRelay.setState(0, this.conn);
     }
 
     // Power off the DUT
     async off(): Promise<void> {
         console.log(`Toggling digital relay off`)
-        await this.digitalRelay.setState(0, false);
+        await this.digitalRelay.setState(0, !this.conn);
     }
 
     async getState(): Promise<string> {
