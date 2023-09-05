@@ -1,4 +1,16 @@
 - commits:
+    - subject: "patch: Update flowzone to enable external contributions"
+      hash: cae5bb536c90ccf30c8e923f605e2dd0df818d06
+      body: ""
+      footer:
+        Signed-off-by: Vipul Gupta (@vipulgupta2048) <vipulgupta2048@gmail.com>
+        signed-off-by: Vipul Gupta (@vipulgupta2048) <vipulgupta2048@gmail.com>
+      author: Vipul Gupta (@vipulgupta2048)
+      nested: []
+  version: 1.0.12
+  title: ""
+  date: 2023-09-05T22:00:39.686Z
+- commits:
     - subject: allow configurable NC on digitalRelay
       hash: eaf365e236344015b61a13b01c76362638d99da8
       body: ""

@@ -1,6 +1,6 @@
 {
   "name": "@balena/autokit",
-  "version": "1.0.11",
+  "version": "1.0.12",
   "description": "software interface for Autokit",
   "main": "build/index.js",
   "files": [
@@ -55,6 +55,6 @@
     "typescript": "^4.7.4"
   },
   "versionist": {
-    "publishedAt": "2023-08-30T13:51:10.447Z"
+    "publishedAt": "2023-09-05T22:00:39.840Z"
   }
 }
