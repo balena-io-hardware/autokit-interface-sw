@@ -1,4 +1,18 @@
 - commits:
+    - subject: add flashing for jetson-flash devices
+      hash: fa3c281caab45c5ef4bd91b66dfa771a2472a6e9
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.15
+  title: ""
+  date: 2023-10-11T10:06:00.987Z
+- commits:
     - subject: search for correct sg device with linuxAut mux
       hash: 47d46f9214640c13aed02f96125833f3537ce32f
       body: ""
