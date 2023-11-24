@@ -338,7 +338,8 @@ async function flashUsbBoot(filename: string, autoKit: Autokit, port: string, po
 }
    
 // this assumes a docker daemon is running on the same host
-async function flashJetson(filename: string, autoKit: Autokit, deviceType: string){
+// utilises containerised jetson-flash tool: https://github.com/balena-os/jetson-flash
+async function flashJetson(filename: string, autoKit: Autokit, deviceType: string, nvme: boolean){
     // put device into recovery mode, this varies depending on the device.
     await autoKit.power.off();
     await delay(5 * 1000);
@@ -346,41 +347,76 @@ async function flashJetson(filename: string, autoKit: Autokit, deviceType: strin
     await autoKit.digitalRelay.on();
     await delay(5 * 1000);
 
-    await flashSD(filename, autoKit);
+    // if the device is one of the NVME device types, we need to flash a USB key with the flasher image
+    // https://github.com/balena-os/jetson-flash#orin-nx-flashing-steps
+    
+    if(nvme){
+        await flashSD(filename, autoKit);
+    }
     
     //power device on again 
     await autoKit.power.on();
 
     const powerOnDelay = Number(process.env.CAP_DELAY) || 1000*60*5;
+
+    // Select the directory to build the container from, and the command to run inside the container once its built and running
     const JETSON_FLASH_DIR = process.env.JETSON_FLASH_DIR || '/usr/app/jetson-flash/Orin_Nx_Nano_NVME'
     const JETSON_FLASH_SCRIPT = process.env.JETSON_FLASH_SCRIPT || 'flash_orin.sh'
     // now start the jetson flash tool with docker. 
     // build first
-    await new Promise<void>(async (resolve, reject) => {
-        let build = spawn('docker',
-            [
-                'build',
-                '-t',
-                'jf-image',
-                `${JETSON_FLASH_DIR}`
-            ], 
-            { 
-                'stdio': 'inherit'
-            }
-        )
+    if(nvme){
+        await new Promise<void>(async (resolve, reject) => {
+            let build = spawn('docker',
+                [
+                    'build',
+                    '-t',
+                    'jf-image',
+                    `${JETSON_FLASH_DIR}`
+                ], 
+                { 
+                    'stdio': 'inherit'
+                }
+            )
 
-        build.on('exit', (code) => {
-            if (code === 0) {
-                resolve();
-            } else {
-                reject()
-            }
+            build.on('exit', (code) => {
+                if (code === 0) {
+                    resolve();
+                } else {
+                    reject()
+                }
+            });
+            build.on('error', (err) => {
+                reject(err);
+            });
         });
-        build.on('error', (err) => {
-            reject(err);
-        });
-    });
+    } else {
+        await new Promise<void>(async (resolve, reject) => {
+            let buildAndRun = spawn(`./build.sh`,
+                [
+                   `-m`,
+                   `${deviceType}`
+                ], 
+                { 
+                    'stdio': 'inherit',
+                    'shell': true,
+                    'cwd': JETSON_FLASH_DIR
+                }
+            )
 
+            buildAndRun.on('exit', (code) => {
+                if (code === 0) {
+                    resolve();
+                } else {
+                    reject()
+                }
+            });
+            buildAndRun.on('error', (err) => {
+                reject(err);
+            });
+        });
+    }
+
+    // run flash container
     console.log(`File path: ${filename}`)
     // Then run container
     await new Promise<void>(async (resolve, reject) => {
@@ -418,49 +454,55 @@ async function flashJetson(filename: string, autoKit: Autokit, deviceType: strin
         });
     });
 
-    // wait for jetson to power off
-    const POLL_INTERVAL = 1000; // 1 second
-    const POLL_TRIES = 20; // 20 tries
-    const TIMEOUT_COUNT = 30000;
-    let attempt = 0;
-    let dutOn = true;
-    await delay(1000 * 60);
-    while (dutOn) {
-        await delay(1000 * 10); // 10 seconds between checks
-        console.log(`waiting for DUT to be off`);
-        dutOn = await checkDutPower(autoKit);
-        // occasionally the DUT might appear to be powered down, but it isn't - we want to confirm that the DUT has stayed off for an interval of time
-        if (!dutOn) {
-            let offCount = 0;
-            console.log(`detected DUT has powered off - confirming...`);
-            for (let tries = 0; tries < POLL_TRIES; tries++) {
-                await delay(POLL_INTERVAL);
-                dutOn = await checkDutPower(autoKit);
-                if (!dutOn) {
-                    offCount += 1;
+
+    if(nvme){
+        // wait for jetson to power off
+        const POLL_INTERVAL = 1000; // 1 second
+        const POLL_TRIES = 20; // 20 tries
+        const TIMEOUT_COUNT = 30000;
+        let attempt = 0;
+        let dutOn = true;
+        await delay(1000 * 60);
+        while (dutOn) {
+            await delay(1000 * 10); // 10 seconds between checks
+            console.log(`waiting for DUT to be off`);
+            dutOn = await checkDutPower(autoKit);
+            // occasionally the DUT might appear to be powered down, but it isn't - we want to confirm that the DUT has stayed off for an interval of time
+            if (!dutOn) {
+                let offCount = 0;
+                console.log(`detected DUT has powered off - confirming...`);
+                for (let tries = 0; tries < POLL_TRIES; tries++) {
+                    await delay(POLL_INTERVAL);
+                    dutOn = await checkDutPower(autoKit);
+                    if (!dutOn) {
+                        offCount += 1;
+                    }
+                }
+                console.log(
+                    `DUT stayted off for ${offCount} checks, expected: ${POLL_TRIES}`,
+                );
+                if (offCount !== POLL_TRIES) {
+                    // if the DUT didn't stay off, then we must try the loop again
+                    dutOn = true;
                 }
             }
-            console.log(
-                `DUT stayted off for ${offCount} checks, expected: ${POLL_TRIES}`,
-            );
-            if (offCount !== POLL_TRIES) {
-                // if the DUT didn't stay off, then we must try the loop again
-                dutOn = true;
+            attempt += 1;
+            if (attempt === TIMEOUT_COUNT){
+                throw new Error(`Timed out while trying to flash internal storage!!`)
             }
         }
-        attempt += 1;
-        if (attempt === TIMEOUT_COUNT){
-            throw new Error(`Timed out while trying to flash internal storage!!`)
-        }
+        console.log('Internally flashed - powering off DUT');
     }
-    console.log('Internally flashed - powering off DUT');
 
     await autoKit.power.off();
     await delay(powerOnDelay);
-    // short pins to enter recovery mode
+    // unshort pins to exit recovery mode
     await autoKit.digitalRelay.off();
     await delay(5 * 1000);
-    await autoKit.sdMux.toggleMux('host');
+    
+    if(nvme){
+        await autoKit.sdMux.toggleMux('host');
+    }
    
 }
 
@@ -488,7 +530,7 @@ async function flash(filename: string, deviceType: string, autoKit: Autokit, por
             break;
         }
         case 'jetson': {
-            await flashJetson(filename, autoKit, deviceType);
+            await flashJetson(filename, autoKit, deviceType, flashProcedure.nvme);
             break;
         }
     }
