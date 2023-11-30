@@ -360,10 +360,16 @@ async function flashJetson(filename: string, autoKit: Autokit, deviceType: strin
     const powerOnDelay = Number(process.env.CAP_DELAY) || 1000*60*5;
 
     // Select the directory to build the container from, and the command to run inside the container once its built and running
-    const JETSON_FLASH_DIR = process.env.JETSON_FLASH_DIR || '/usr/app/jetson-flash/Orin_Nx_Nano_NVME'
-    const JETSON_FLASH_SCRIPT = process.env.JETSON_FLASH_SCRIPT || 'flash_orin.sh'
+    const JETSON_FLASH_DIR = process.env.JETSON_FLASH_DIR || '/usr/app/jetson-flash/Orin_Nx_Nano_NVME';
+    const JETSON_FLASH_SCRIPT = process.env.JETSON_FLASH_SCRIPT || 'flash_orin.sh';
+    const JETSON_FLASH_BRANCH = process.env.JETSON_FLASH_BRANCH || 'master';
     // now start the jetson flash tool with docker. 
     // build first
+
+    // ensure we have latest jetson-flash
+    let checkout = await exec(`cd /usr/app/jetson-flash && git fetch && git reset --hard origin/${JETSON_FLASH_BRANCH}`);
+    console.log(checkout)
+
     if(nvme){
         await new Promise<void>(async (resolve, reject) => {
             let build = spawn('docker',
