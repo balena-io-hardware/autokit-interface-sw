@@ -1,4 +1,18 @@
 - commits:
+    - subject: enable jetson-agx-orin-devkit and orin-nx-xavier-nx
+      hash: 939831435dd2393911e793c5afb0fe7c8d6db925
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.16
+  title: ""
+  date: 2023-11-30T16:26:18.814Z
+- commits:
     - subject: add flashing for jetson-flash devices
       hash: fa3c281caab45c5ef4bd91b66dfa771a2472a6e9
       body: ""
