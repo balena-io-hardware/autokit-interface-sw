@@ -1,4 +1,18 @@
 - commits:
+    - subject: checkout latest jetson-flash
+      hash: 45138d629f666589a7eb74ec18f80c3de7304edb
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.17
+  title: ""
+  date: 2023-12-01T11:11:29.548Z
+- commits:
     - subject: enable jetson-agx-orin-devkit and orin-nx-xavier-nx
       hash: 939831435dd2393911e793c5afb0fe7c8d6db925
       body: ""
