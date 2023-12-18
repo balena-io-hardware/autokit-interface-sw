@@ -53,7 +53,7 @@ export class Autokit {
      * Flash a DUT from a file path.
      **/
     async flash(filename: string, deviceType: string){
-        await flash(filename, deviceType, this ,this.config.usbBootPort);
+        await flash(filename, deviceType, this , this.config.usbBootPort);
     }
 
     /**
