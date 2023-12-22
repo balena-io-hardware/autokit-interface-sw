@@ -1,4 +1,18 @@
 - commits:
+    - subject: add iot-gate devices
+      hash: 1cacc6a72f00a9b1b965494550d5175a76aca218
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.18
+  title: ""
+  date: 2023-12-22T11:27:12.936Z
+- commits:
     - subject: checkout latest jetson-flash
       hash: 45138d629f666589a7eb74ec18f80c3de7304edb
       body: ""
