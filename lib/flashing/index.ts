@@ -92,10 +92,15 @@ async function getDrive(
 /**
  * Toggles uhubctl-compatible USB port power state
  **/
-async function toggleUsb(state: boolean, port: string) {
+async function toggleUsb(state: boolean, port: usbPort) {
     console.log(`Toggling USB ${state ? 'on' : 'off'}`);
+    let loc = ''
+    if(port.location !== undefined){
+        loc = `-l ${port.location}`
+    }
+    console.log(`trying:  uhubctl -r 1000 -a ${state ? 'on' : 'off'} -p ${port.port} ${loc}`)
     await exec(
-        `uhubctl -r 1000 -a ${state ? 'on' : 'off'} -p ${port} -l 1-1`,
+        `uhubctl -r 1000 -a ${state ? 'on' : 'off'} -p ${port.port} ${loc}`,
     ).catch(() => {
         console.log(`Failed. Check that uhubctl is available.`);
     });
@@ -214,7 +219,7 @@ async function flashFlasher(filename: string, autoKit: Autokit, jumper: boolean)
     await delay(powerOnDelay)
 }
 
-async function flashUsbBoot(filename: string, autoKit: Autokit, port: string, power: boolean, jumper: boolean){
+async function flashUsbBoot(filename: string, autoKit: Autokit, port: usbPort, power: boolean, jumper: boolean){
      // this delay is how long to wait after internal flashing before trying to re power the board. For the case where devices have capacitors that
     // take time to drain
     const powerOnDelay = Number(process.env.CAP_DELAY) || 1000*60;
@@ -512,11 +517,73 @@ async function flashJetson(filename: string, autoKit: Autokit, deviceType: strin
    
 }
 
+async function flashIotGate(filename: string, autoKit: Autokit, port: usbPort, dram: string){
+    const powerOnDelay = Number(process.env.CAP_DELAY) || 1000*60*5;
+
+    // ensure we have latest flasher tool
+    const IOT_GATE_FLASH_BRANCH = process.env.IOT_GATE_FLASH_BRANCH || 'master';
+    let checkout = await exec(`cd /usr/app/iot-gate-imx8plus-flashtools && git fetch && git reset --hard origin/${IOT_GATE_FLASH_BRANCH}`);
+
+    // Ensure DUT is powered off
+    await autoKit.power.off();
+    await delay(5 * 1000);
+
+    // VCC of the programming USB cable is connected to NO relay
+    // toggle relay "ON" to connect to USB
+    await autoKit.digitalRelay.on();
+    await delay(5 * 1000);
+
+    // Power DUT on
+    await autoKit.power.on();
+
+    // run flash container
+    await new Promise<void>(async (resolve, reject) => {
+        let flash = spawn('./run_container.sh',
+            [
+               '-a',
+               'armv7',
+               '-d',
+               dram,
+               '-i',
+               filename
+            ], 
+            { 
+                'stdio': 'inherit',
+                'shell': true,
+                'cwd': '/usr/app/iot-gate-imx8plus-flashtools'
+            }
+        )
+
+        flash.on('exit', (code) => {
+            if (code === 0) {
+                resolve();
+            } else {
+                reject()
+            }
+        });
+        flash.on('error', (err) => {
+            reject(err);
+        });
+    });
+
+
+    await autoKit.power.off();
+
+    // simulate unplugging of the USB programming cable
+
+    // VCC of the programming USB cable is connected to NO relay
+    // toggle relay "OFF" to connect to disconnect USB
+    await autoKit.digitalRelay.off();
+    await delay(5 * 1000);
+
+    await delay(powerOnDelay);
+}
+
 /**
  * 
  * Flash a given device type, automatically selecting the corresponding flashing method
  */
-async function flash(filename: string, deviceType: string, autoKit: Autokit, port?: string){
+async function flash(filename: string, deviceType: string, autoKit: Autokit, port?: usbPort){
     const flashProcedure = await import(`${__dirname}/devices/${deviceType}.json`);
     console.log(flashProcedure)
     switch(flashProcedure.type){
@@ -538,6 +605,12 @@ async function flash(filename: string, deviceType: string, autoKit: Autokit, por
         case 'jetson': {
             await flashJetson(filename, autoKit, deviceType, flashProcedure.nvme);
             break;
+        }
+        case 'iot-gate': {
+            if(port === undefined){
+                throw new Error('No usb port specified!')
+            }
+            await flashIotGate(filename, autoKit, port, flashProcedure.dram)
         }
     }
 }

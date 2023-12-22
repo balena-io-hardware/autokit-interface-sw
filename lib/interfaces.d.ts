@@ -48,10 +48,15 @@ interface AutokitConfig{
     sdMux: string;
     network: string; 
     video: string;
-    usbBootPort?: string;
+    usbBootPort?: usbPort;
     serial: string;
     digitalRelay: string;
 }
 
 // utility from angular
 interface Type<T> extends Function { new (...args: any[]): T; }
+
+interface usbPort{
+    port: string,
+    location?: string
+}
