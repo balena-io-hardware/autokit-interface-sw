@@ -6,11 +6,11 @@ export class AutokitRelay implements Power {
     private relayId: string
     private powerRelay: any
     private conn: boolean
+    private relayNum: number
     constructor(){
         this.relayId = process.env.POWER_RELAY_SERIAL || 'HURTM'
+        this.relayNum = Number(process.env.POWER_RELAY_NUM || '0')
         let relays = USBRelay.Relays 
-        console.log(relays)
-        //this.powerRelay = new USBRelay()
         // iterate through the array, and find the relay that is associated with power
         // if there is only one relay, then it doesn't matter
         if(relays.length === 1){
@@ -18,7 +18,6 @@ export class AutokitRelay implements Power {
         } else{
             for(let relay of relays){
                 if(relay.getSerialNumber() === this.relayId ){
-                    console.log(`Relay ID ${this.relayId} is on HID path ${relay.devicePath}`)
                     this.powerRelay = new USBRelay(relay.devicePath);
                 }
             }
@@ -27,19 +26,19 @@ export class AutokitRelay implements Power {
     }
 
     async setup(): Promise<void> {
-        console.log(`Relay ID ${this.relayId} is on HID path ${this.powerRelay.devicePath}`)
+        console.log(`Power Relay ID: ${this.relayId} is on HID path: ${this.powerRelay.devicePath}, channel: ${this.relayNum}`)
     }
 
     // Power on the DUT
     async on(voltage?: number): Promise<void> {
         console.log(`Powering on DUT...`)
-        await this.powerRelay.setState(0, this.conn);
+        await this.powerRelay.setState(this.relayNum, this.conn);
     }
 
     // Power off the DUT
     async off(): Promise<void> {
         console.log(`Powering off DUT...`)
-        await this.powerRelay.setState(0, !this.conn);
+        await this.powerRelay.setState(this.relayNum, !this.conn);
     }
 
     async getState(): Promise<string> {
