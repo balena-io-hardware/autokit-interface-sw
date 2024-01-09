@@ -4,10 +4,11 @@ export class DigitalUSBRelay implements DigitalRelay {
     private relayId: string
     private digitalRelay: any
     private conn: boolean
+    private relayNum: number
     constructor(){
         this.relayId = process.env.DIGITAL_RELAY_SERIAL || '959BI'
+        this.relayNum = Number(process.env.DIGITAL_RELAY_NUM || '0')
         let relays = USBRelay.Relays 
-        console.log(relays)
         // iterate through the array, and find the relay that is associated with power
         // if there is only one relay, then it doesn't matter
         for(let relay of relays){
@@ -19,19 +20,19 @@ export class DigitalUSBRelay implements DigitalRelay {
     }
 
     async setup(): Promise<void> {
-        console.log(`Relay ID ${this.relayId} is on HID path ${this.digitalRelay.devicePath}`)
+        console.log(`Digital Relay ID: ${this.relayId} is on HID path: ${this.digitalRelay.devicePath}, channel: ${this.relayNum}`)
     }
 
     // Power on the DUT
     async on(): Promise<void> {
         console.log(`Toggling digital relay on`)
-        await this.digitalRelay.setState(0, this.conn);
+        await this.digitalRelay.setState(this.relayNum, this.conn);
     }
 
     // Power off the DUT
     async off(): Promise<void> {
         console.log(`Toggling digital relay off`)
-        await this.digitalRelay.setState(0, !this.conn);
+        await this.digitalRelay.setState(this.relayNum, !this.conn);
     }
 
     async getState(): Promise<string> {
