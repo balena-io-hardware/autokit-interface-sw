@@ -1,4 +1,38 @@
 - commits:
+    - subject: add jetson-orin-nx-seeed-j4012
+      hash: ab2841c4c326df603c13589506f7250be06d5e2c
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+    - subject: adjust name of iot-gate-imx8-d1d8
+      hash: 5fae72db9bce8382101cc48f963d1699b924482a
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+    - subject: Allow for sharing single relay
+      hash: ffc5c7d5b52af51c89c980d78030e8765a8d7909
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.19
+  title: ""
+  date: 2024-01-09T16:11:41.800Z
+- commits:
     - subject: add iot-gate devices
       hash: 1cacc6a72f00a9b1b965494550d5175a76aca218
       body: ""
