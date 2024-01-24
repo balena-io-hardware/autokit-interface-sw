@@ -1,14 +1,15 @@
-import { SerialPort } from "serialport";
+const SerialPort  = require('serialport');
 
 export class Ftdi implements Serial {
     public DEV_SERIAL = '/dev/ttyUSB0' || process.env.DEV_SERIAL;
-    public serial : SerialPort;
+    public serial : any;
     constructor(baudRate = 115200){
-        this.serial = new SerialPort({
-            path: this.DEV_SERIAL,
-            baudRate: baudRate,
-            autoOpen: false,
-        });
+        this.serial = new SerialPort(
+            this.DEV_SERIAL,
+            {
+                baudRate: baudRate,
+                autoOpen: false,
+            });
     
     }
 

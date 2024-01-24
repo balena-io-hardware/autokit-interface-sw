@@ -140,7 +140,17 @@ async function checkDutPower(autoKit:Autokit) {
     }
 }
 
-async function flashFlasher(filename: string, autoKit: Autokit, jumper: boolean){
+
+const KEY_DELAY = Number(process.env.KEY_DELAY) || 500;
+async function keyboardSequence(autoKit: Autokit, keyboard: [string]){
+    for(let key of keyboard){
+        // press key
+        await autoKit.keyboard.pressKey(key);
+        await delay(KEY_DELAY);
+    }
+}
+
+async function flashFlasher(filename: string, autoKit: Autokit, jumper: boolean, keyboard?:[string]){
     // this delay is how long to wait after internal flashing before trying to re power the board. For the case where devices have capacitors that
     // take time to drain
     const powerOnDelay = Number(process.env.CAP_DELAY) || 1000*60;
@@ -154,9 +164,20 @@ async function flashFlasher(filename: string, autoKit: Autokit, jumper: boolean)
         await autoKit.digitalRelay.on()
     }
 
+
+    if(keyboard !== undefined){
+        // Devices expect a monitor to be plugged - or they may not boot...
+        await autoKit.video.startCapture({fake: true});
+        console.log(`Starting keyboard sequence...`)
+        keyboardSequence(autoKit, keyboard)
+    }
+
     //small delay to ensure sd and jumper has toggled
     await delay(1000 * 10);
+
     await autoKit.power.on();
+
+    
 
     // dut will now internally flash - need to wait until we detect DUT has powered off
     // can be done through ethernet carrier signal, or through current measurement (or something else...)
@@ -623,7 +644,7 @@ async function flash(filename: string, deviceType: string, autoKit: Autokit, por
             break;
         }
         case 'flasher': {
-            await flashFlasher(filename, autoKit, flashProcedure.jumper);
+            await flashFlasher(filename, autoKit, flashProcedure.jumper, flashProcedure.keyboard);
             break;
         }
         case 'jetson': {
