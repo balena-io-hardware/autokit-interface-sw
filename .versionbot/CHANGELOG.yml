@@ -1,4 +1,18 @@
 - commits:
+    - subject: add generic flash mechanisms
+      hash: 248cdc793d4a993eda2d90755999d33c55b88b78
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.20
+  title: ""
+  date: 2024-01-26T10:25:57.525Z
+- commits:
     - subject: add jetson-orin-nx-seeed-j4012
       hash: ab2841c4c326df603c13589506f7250be06d5e2c
       body: ""
