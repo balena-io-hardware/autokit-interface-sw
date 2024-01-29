@@ -1,4 +1,18 @@
 - commits:
+    - subject: move git clones from worker dockerfile to autokit init
+      hash: 83f45595ac87f5c514627bc3c32b2d7a7f865fb2
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.21
+  title: ""
+  date: 2024-01-29T16:25:45.650Z
+- commits:
     - subject: add generic flash mechanisms
       hash: 248cdc793d4a993eda2d90755999d33c55b88b78
       body: ""
