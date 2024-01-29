@@ -15,10 +15,20 @@ export class Crelay implements Power {
     }
 
     async setup(): Promise<void> {
-        // this retrieves info about the relay being used, and its serial
-        let info = await execAsync(`crelay -i ${this.relayId}`);
-        console.log(`Crelay controlled relay being used for power, channel: ${this.relayId}.`);
-        console.log(info.stdout);
+        // install craly tooling
+        try {
+            await execAsync('cd /usr/app/ && git clone https://github.com/balena-io-hardware/crelay.git');
+            await execAsync('cd /usr/app/crelay/src && make [DRV_CONRAD=n] [DRV_SAINSMART=n] [DRV_HIDAPI=n] && make install');
+            await execAsync('cp /usr/app/crelay/src/crelay /usr/local/bin/crelay');
+            
+            // this retrieves info about the relay being used, and its serial
+            let info = await execAsync(`crelay -i ${this.relayId}`);
+            console.log(`Crelay controlled relay being used for power, channel: ${this.relayId}.`);
+            console.log(info.stdout);
+        } catch(e){
+            console.log(e)
+            console.log('Failed to initialise crelay tooling!')
+        }
     }
 
     // Power on the DUT

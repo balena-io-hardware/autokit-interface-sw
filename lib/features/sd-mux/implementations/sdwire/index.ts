@@ -10,11 +10,21 @@ export class SdWire implements SdMux {
     }
 
     async setup(): Promise<void> {
-        // set to host
-        await execAsync('sd-mux-ctrl --ts -v 0');
-        let sdCheck = await execAsync(`ls /dev/disk/by-id/usb-Generic_Ultra_HS-SD_MMC_* | head -1`);
-        this.DEV_SD = sdCheck.stdout.trim();
-        console.log(`SD MUX is: ${this.DEV_SD}`);
+        // download the tool
+        try {
+            await execAsync('cd /usr/app/ && git clone https://git.tizen.org/cgit/tools/testlab/sd-mux');
+            await execAsync('cd /usr/app/sd-mux/ && mkdir build && cd build && cmake ../ && make');
+            await execAsync('cp /usr/app/sd-mux/build/src/sd-mux-ctrl /usr/local/sbin/sd-mux-ctrl');
+        
+            // set to host
+            await execAsync('sd-mux-ctrl --ts -v 0');
+            let sdCheck = await execAsync(`ls /dev/disk/by-id/usb-Generic_Ultra_HS-SD_MMC_* | head -1`);
+            this.DEV_SD = sdCheck.stdout.trim();
+            console.log(`SD MUX is: ${this.DEV_SD}`);
+        } catch (e){
+            console.log(e)
+            console.log(`Failure to initialise sdwire!`)
+        }
     }
 
     async toggleMux(state: string): Promise<void> {

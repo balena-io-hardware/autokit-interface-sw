@@ -345,6 +345,23 @@ async function flashUsbBoot(filename: string, autoKit: Autokit, port: usbPort, p
 // this assumes a docker daemon is running on the same host
 // utilises containerised jetson-flash tool: https://github.com/balena-os/jetson-flash
 async function flashJetson(filename: string, autoKit: Autokit, deviceType: string, nvme: boolean){
+    // Select the directory to build the container from, and the command to run inside the container once its built and running
+    const JETSON_FLASH_DIR = process.env.JETSON_FLASH_DIR || '/usr/app/jetson-flash/Orin_Nx_Nano_NVME';
+    const JETSON_FLASH_SCRIPT = process.env.JETSON_FLASH_SCRIPT || 'flash_orin.sh';
+    const JETSON_FLASH_BRANCH = process.env.JETSON_FLASH_BRANCH || 'master';
+    // now start the jetson flash tool with docker. 
+    // build first
+
+    try{ 
+        await exec('cd /usr/app/ && git clone https://github.com/balena-os/jetson-flash.git');
+    } catch(e){
+        console.log(e)
+    }
+
+    // ensure we have latest jetson-flash
+    let checkout = await exec(`cd /usr/app/jetson-flash && git fetch && git reset --hard origin/${JETSON_FLASH_BRANCH}`);
+    console.log(checkout)
+    
     // put device into recovery mode, this varies depending on the device.
     await autoKit.power.off();
     await delay(5 * 1000);
@@ -363,17 +380,6 @@ async function flashJetson(filename: string, autoKit: Autokit, deviceType: strin
     await autoKit.power.on();
 
     const powerOnDelay = Number(process.env.CAP_DELAY) || 1000*60*5;
-
-    // Select the directory to build the container from, and the command to run inside the container once its built and running
-    const JETSON_FLASH_DIR = process.env.JETSON_FLASH_DIR || '/usr/app/jetson-flash/Orin_Nx_Nano_NVME';
-    const JETSON_FLASH_SCRIPT = process.env.JETSON_FLASH_SCRIPT || 'flash_orin.sh';
-    const JETSON_FLASH_BRANCH = process.env.JETSON_FLASH_BRANCH || 'master';
-    // now start the jetson flash tool with docker. 
-    // build first
-
-    // ensure we have latest jetson-flash
-    let checkout = await exec(`cd /usr/app/jetson-flash && git fetch && git reset --hard origin/${JETSON_FLASH_BRANCH}`);
-    console.log(checkout)
 
     if(nvme){
         await new Promise<void>(async (resolve, reject) => {
@@ -522,6 +528,11 @@ async function flashIotGate(filename: string, autoKit: Autokit, port: usbPort, d
 
     // ensure we have latest flasher tool
     const IOT_GATE_FLASH_BRANCH = process.env.IOT_GATE_FLASH_BRANCH || 'master';
+    try{ 
+        await exec('cd /usr/app/ && git clone https://github.com/balena-os/iot-gate-imx8plus-flashtools.git');
+    } catch(e){
+        console.log(e)
+    }
     let checkout = await exec(`cd /usr/app/iot-gate-imx8plus-flashtools && git fetch && git reset --hard origin/${IOT_GATE_FLASH_BRANCH}`);
 
     // Ensure DUT is powered off
