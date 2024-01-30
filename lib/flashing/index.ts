@@ -387,7 +387,7 @@ async function flashJetson(filename: string, autoKit: Autokit, deviceType: strin
                 [
                     'build',
                     '-t',
-                    'jf-image',
+                    'jetson-flash-image',
                     `${JETSON_FLASH_DIR}`
                 ], 
                 { 
@@ -450,7 +450,7 @@ async function flashJetson(filename: string, autoKit: Autokit, deviceType: strin
                 '/data:/data/',
                 '-v',
                 '/dev:/dev',
-                'jf-image',
+                'jetson-flash-image',
                 `./${JETSON_FLASH_SCRIPT} -f ${filename} -m ${deviceType} --accept-license yes`
             ], 
             { 
