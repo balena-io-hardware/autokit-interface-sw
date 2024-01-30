@@ -380,96 +380,105 @@ async function flashJetson(filename: string, autoKit: Autokit, deviceType: strin
     await autoKit.power.on();
 
     const powerOnDelay = Number(process.env.CAP_DELAY) || 1000*60*5;
+    try{
+        if(nvme){
+            await new Promise<void>(async (resolve, reject) => {
+                let build = spawn('docker',
+                    [
+                        'build',
+                        '-t',
+                        'jetson-flash-image',
+                        `${JETSON_FLASH_DIR}`
+                    ], 
+                    { 
+                        'stdio': 'inherit'
+                    }
+                )
 
-    if(nvme){
-        await new Promise<void>(async (resolve, reject) => {
-            let build = spawn('docker',
-                [
-                    'build',
-                    '-t',
-                    'jetson-flash-image',
-                    `${JETSON_FLASH_DIR}`
-                ], 
-                { 
-                    'stdio': 'inherit'
-                }
-            )
+                build.on('exit', (code) => {
+                    if (code === 0) {
+                        resolve();
+                    } else {
+                        reject(new Error(`Docker build exit code was: ${code}`));
+                    }
+                });
+                build.on('error', (err) => {
+                    reject(new Error(`Error with docker build: ${err.message}`));
+                });
+            });
+        } else {
+            await new Promise<void>(async (resolve, reject) => {
+                let buildAndRun = spawn(`./build.sh`,
+                    [
+                    `-m`,
+                    `${deviceType}`
+                    ], 
+                    { 
+                        'stdio': 'inherit',
+                        'shell': true,
+                        'cwd': JETSON_FLASH_DIR
+                    }
+                )
 
-            build.on('exit', (code) => {
-                if (code === 0) {
-                    resolve();
-                } else {
-                    reject()
-                }
+                buildAndRun.on('exit', (code) => {
+                    if (code === 0) {
+                        resolve();
+                    } else {
+                        console.log(`Got exit code ${code}.. error`);
+                        reject(new Error(`Docker build exit code was: ${code}`));
+                    }
+                });
+                buildAndRun.on('error', (err) => {
+                    reject(new Error(`Error with docker build: ${err.message}`));
+                });
             });
-            build.on('error', (err) => {
-                reject(err);
-            });
-        });
-    } else {
-        await new Promise<void>(async (resolve, reject) => {
-            let buildAndRun = spawn(`./build.sh`,
-                [
-                   `-m`,
-                   `${deviceType}`
-                ], 
-                { 
-                    'stdio': 'inherit',
-                    'shell': true,
-                    'cwd': JETSON_FLASH_DIR
-                }
-            )
-
-            buildAndRun.on('exit', (code) => {
-                if (code === 0) {
-                    resolve();
-                } else {
-                    reject()
-                }
-            });
-            buildAndRun.on('error', (err) => {
-                reject(err);
-            });
-        });
+        }
+    } catch (err: any){
+        throw new Error(`Failed during jetson-flash container build: ${err.message}`);
     }
 
     // run flash container
     console.log(`File path: ${filename}`)
     // Then run container
-    await new Promise<void>(async (resolve, reject) => {
-        let flash = spawn('docker',
-            [
-                'container',
-                'run',
-                '--rm',
-                '-it',
-                '--privileged',
-                '-v',
-                '/dev/bus/usb:/dev/bus/usb',
-                '-v',
-                '/data:/data/',
-                '-v',
-                '/dev:/dev',
-                'jetson-flash-image',
-                `./${JETSON_FLASH_SCRIPT} -f ${filename} -m ${deviceType} --accept-license yes`
-            ], 
-            { 
-                'stdio': 'inherit',
-                'shell': true,
-            }
-        )
+    try{
+        await new Promise<void>(async (resolve, reject) => {
+            let flash = spawn('docker',
+                [
+                    'container',
+                    'run',
+                    '--rm',
+                    '-it',
+                    '--privileged',
+                    '-v',
+                    '/dev/bus/usb:/dev/bus/usb',
+                    '-v',
+                    '/data:/data/',
+                    '-v',
+                    '/dev:/dev',
+                    'jetson-flash-image',
+                    `./${JETSON_FLASH_SCRIPT} -f ${filename} -m ${deviceType} --accept-license yes`
+                ], 
+                { 
+                    'stdio': 'inherit',
+                    'shell': true,
+                }
+            )
 
-        flash.on('exit', (code) => {
-            if (code === 0) {
-                resolve();
-            } else {
-                reject()
-            }
+            flash.on('exit', (code) => {
+                if (code === 0) {
+                    resolve();
+                } else {
+                    console.log(`Got exit code ${code}.. error`);
+                    reject(new Error(`Docker run exit code was: ${code}`))
+                }
+            });
+            flash.on('error', (err) => {
+                reject(new Error(`Error with docker run: ${err.message}`));
+            });
         });
-        flash.on('error', (err) => {
-            reject(err);
-        });
-    });
+    } catch(err:any){
+        throw new Error(`Failed during jetson-flash container run: ${err.message}`)
+    }
 
 
     if(nvme){
@@ -548,34 +557,38 @@ async function flashIotGate(filename: string, autoKit: Autokit, port: usbPort, d
     await autoKit.power.on();
 
     // run flash container
-    await new Promise<void>(async (resolve, reject) => {
-        let flash = spawn('./run_container.sh',
-            [
-               '-a',
-               'armv7',
-               '-d',
-               dram,
-               '-i',
-               filename
-            ], 
-            { 
-                'stdio': 'inherit',
-                'shell': true,
-                'cwd': '/usr/app/iot-gate-imx8plus-flashtools'
-            }
-        )
+    try{
+        await new Promise<void>(async (resolve, reject) => {
+            let flash = spawn('./run_container.sh',
+                [
+                '-a',
+                'armv7',
+                '-d',
+                dram,
+                '-i',
+                filename
+                ], 
+                { 
+                    'stdio': 'inherit',
+                    'shell': true,
+                    'cwd': '/usr/app/iot-gate-imx8plus-flashtools'
+                }
+            )
 
-        flash.on('exit', (code) => {
-            if (code === 0) {
-                resolve();
-            } else {
-                reject()
-            }
+            flash.on('exit', (code) => {
+                if (code === 0) {
+                    resolve();
+                } else {
+                    reject(new Error(`Docker run exit code was: ${code}`))
+                }
+            });
+            flash.on('error', (err) => {
+                reject(new Error(`Error with docker run: ${err.message}`));
+            });
         });
-        flash.on('error', (err) => {
-            reject(err);
-        });
-    });
+    } catch(err:any){
+        throw new Error(`IOT-gate-imx8plus flasher tool failed: ${err.message}`)
+    }
 
 
     await autoKit.power.off();
