@@ -31,29 +31,44 @@ export class LinuxVideo implements Video {
 		// find video device
     }
 
-    async startCapture(): Promise<string> {
+    async startCapture(opts?: {fake: boolean}): Promise<string> {
 
 		await ensureDir(this.captureFolder);
 
         const gstreamerHandle = () => {
-			this.proc = spawn(
-				'gst-launch-1.0',
-				[
-					`v4l2src ! decodebin ! videocrop left=90 right=90 bottom=70 top=70 ! jpegenc quality=10 ! multifilesink location="${
-						this.captureFolder
-					}/%06d.jpg"`,
-				],
-				{
-					shell: '/bin/bash',
-				},
-			);
+			if(opts?.fake){
+				this.proc = spawn(
+					'gst-launch-1.0',
+					[
+						`v4l2src ! decodebin ! jpegenc quality=50 ! fakesink`,
+					],
+					{
+						shell: '/bin/bash',
+					},
+				);
+			} else {
+				this.proc = spawn(
+					'gst-launch-1.0',
+					[
+						`v4l2src ! decodebin ! jpegenc quality=50 ! multifilesink location="${
+							this.captureFolder
+						}/%06d.jpg"`,
+					],
+					{
+						shell: '/bin/bash',
+					},
+				);
+			}
+			
             if(this.proc.stdout !== null){
 			    this.proc.stdout.on('data', (data) => {
+					console.log(`${data.toString('utf-8')}`);
 				    this.exit.details.stdout += `${data.toString('utf-8')}\n`;
 			    });
             }
             if(this.proc.stderr !== null){
                 this.proc.stderr.on('data', (data) => {
+					console.log(`${data.toString('utf-8')}`);
                     this.exit.details.stderr += `${data.toString('utf-8')}\n`;
                 });
             }
@@ -86,6 +101,7 @@ export class LinuxVideo implements Video {
 					this.proc = undefined;
 				};
 				const exitHandler = () => {
+					console.log(`Gstreamer pipeline successfully closed`);
 					clean();
 					resolve();
 				};

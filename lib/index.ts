@@ -5,6 +5,7 @@ import { videoImplementations } from './features/video';
 import { sdMuxImplementations } from './features/sd-mux';
 import { serialImplementations } from './features/serial';
 import { digitalRelayImplementations } from './features/digitalRelay';
+import { keyboardImplementations } from './features/keyboard';
 
 import { flash } from './flashing'
 
@@ -16,6 +17,7 @@ export class Autokit {
     public sdMux: SdMux;
     public serial: Serial;
     public digitalRelay: DigitalRelay;
+    public keyboard: Keyboard;
 
      /**
      * @param config - AutokitConfig object, MUST define every implementation. You can use a Dummy one if needed.
@@ -29,6 +31,7 @@ export class Autokit {
         this.serial = new serialImplementations[this.config.serial]();
         this.serial = new serialImplementations[this.config.serial]();
         this.digitalRelay = new digitalRelayImplementations[this.config.digitalRelay]
+        this.keyboard = new keyboardImplementations[this.config.keyboard];
     }
 
     /**
@@ -44,6 +47,7 @@ export class Autokit {
         await this.sdMux.setup();
         await this.serial.setup();
         await this.digitalRelay.setup();
+        await this.keyboard.setup();
         console.log(`Setup completed!`)
         // TODO check for what features are enabled, and expose this to the user - give a summary
     }

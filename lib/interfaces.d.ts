@@ -25,7 +25,7 @@ interface Network extends Base{
 
 interface Video extends Base{
     captureFolder: string;
-    startCapture(): Promise<string>;
+    startCapture(opts?: {fake: boolean}): Promise<string>;
     stopCapture(): Promise<void>;
 }
 
@@ -42,6 +42,10 @@ interface Serial extends Base{
     close(): Promise<void>;
 }
 
+interface Keyboard extends Base{
+    pressKey(key: string): Promise<string | void>;
+}
+
 // specify which peripherals are in use
 interface AutokitConfig{
     power: string;
@@ -51,6 +55,7 @@ interface AutokitConfig{
     usbBootPort?: usbPort;
     serial: string;
     digitalRelay: string;
+    keyboard: string;
 }
 
 // utility from angular
