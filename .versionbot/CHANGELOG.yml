@@ -1,4 +1,28 @@
 - commits:
+    - subject: add correct error handling for containerised flash tools
+      hash: 92d6b1ad7dda12641963df770c97db46ed19b572
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+    - subject: rename jetson-flash tag to match build.sh
+      hash: 7f9b91b4f27d24817a3a9d08f4107bfcba3b95cd
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.22
+  title: ""
+  date: 2024-02-02T11:16:10.126Z
+- commits:
     - subject: move git clones from worker dockerfile to autokit init
       hash: 83f45595ac87f5c514627bc3c32b2d7a7f865fb2
       body: ""
