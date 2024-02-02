@@ -1,4 +1,18 @@
 - commits:
+    - subject: add keyboard emulation feature
+      hash: 64798fbe69a924701ee84fa4f49687a7e0c69682
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.23
+  title: ""
+  date: 2024-02-02T11:45:08.083Z
+- commits:
     - subject: add correct error handling for containerised flash tools
       hash: 92d6b1ad7dda12641963df770c97db46ed19b572
       body: ""
