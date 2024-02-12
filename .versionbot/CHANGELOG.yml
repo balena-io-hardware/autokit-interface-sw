@@ -1,4 +1,18 @@
 - commits:
+    - subject: fix sdwire setup
+      hash: 4774ad9bf9bac0d92d4c7bd58ed9e65f19b37173
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.24
+  title: ""
+  date: 2024-02-12T15:31:05.822Z
+- commits:
     - subject: add keyboard emulation feature
       hash: 64798fbe69a924701ee84fa4f49687a7e0c69682
       body: ""
