@@ -1,4 +1,18 @@
 - commits:
+    - subject: Add documentation for all current inv vars and configuration vars
+      hash: 8a7941f0bb4e24b070621b2d053be949e0b167ef
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.25
+  title: ""
+  date: 2024-02-22T11:20:10.831Z
+- commits:
     - subject: fix sdwire setup
       hash: 4774ad9bf9bac0d92d4c7bd58ed9e65f19b37173
       body: ""
