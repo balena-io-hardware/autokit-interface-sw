@@ -1,0 +1,9 @@
+{
+    "power": "dummyPower",
+    "sdMux": "dummySdMux",
+    "network": "dummyNetwork",
+    "video": "dummyVideo",
+    "serial": "dummySerial",
+    "digitalRelay": "dummyPower",
+    "keyboard": "dummyKeyboard"
+}

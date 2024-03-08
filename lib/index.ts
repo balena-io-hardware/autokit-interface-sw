@@ -10,7 +10,7 @@ import { keyboardImplementations } from './features/keyboard';
 import { flash } from './flashing'
 
 export class Autokit {
-    private config: AutokitConfig;
+    public config: AutokitConfig;
     public power: Power;
     public network: Network;
     public video : Video;

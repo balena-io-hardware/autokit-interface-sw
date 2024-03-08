@@ -1,7 +1,8 @@
 {
   "include": [
     "./lib/flashing/devices/*.json",
-    "./lib"
+    "./lib",
+    "./lib/config.json"
   ],
   "compilerOptions": {
     "typeRoots": [
