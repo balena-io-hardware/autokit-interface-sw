@@ -1,4 +1,20 @@
 - commits:
+    - subject: "lib/flashing/devices: Add json for jetson-xavier"
+      hash: e3a134bb95fb5648b26998ea9f5a57d28e8ca865
+      body: |
+        The Xavier AGX is flashed using the jetson-flash node app,
+        and boots from the eMMC.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Alexandru Costache <alexandru@balena.io>
+        signed-off-by: Alexandru Costache <alexandru@balena.io>
+      author: Alexandru Costache
+      nested: []
+  version: 1.0.26
+  title: ""
+  date: 2024-04-01T11:51:17.473Z
+- commits:
     - subject: Add documentation for all current inv vars and configuration vars
       hash: 8a7941f0bb4e24b070621b2d053be949e0b167ef
       body: ""
