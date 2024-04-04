@@ -1,4 +1,20 @@
 - commits:
+    - subject: "lib/flashing/devices: Add json files for Jetson Xavier NX devices"
+      hash: f14b0a05c42e91dd7ce1cdfc8b6f6ab45822374b
+      body: |2
+            The Xavier NX devices are flashed using the jetson-flash node app,
+            and they boot from either eMMC or SD-CARD.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Alexandru Costache <alexandru@balena.io>
+        signed-off-by: Alexandru Costache <alexandru@balena.io>
+      author: Alexandru Costache
+      nested: []
+  version: 1.0.27
+  title: ""
+  date: 2024-04-04T08:09:43.581Z
+- commits:
     - subject: "lib/flashing/devices: Add json for jetson-xavier"
       hash: e3a134bb95fb5648b26998ea9f5a57d28e8ca865
       body: |
