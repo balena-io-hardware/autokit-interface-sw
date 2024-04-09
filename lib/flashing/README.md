@@ -5,7 +5,7 @@ The autokit can be used to automated the flashing/provisioning of may linuxSBC d
 
 ## Types of device
 
-Depending on the characteristics of the DUT, different 3 rhardare configurations and software parameters must be set differently.
+Depending on the characteristics of the DUT, different 3 hardware configurations and software parameters must be set differently.
 
 ### Generic sd card boot devices
 
