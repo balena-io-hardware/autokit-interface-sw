@@ -1,4 +1,20 @@
 - commits:
+    - subject: "crelay: fix compilation issues"
+      hash: 48251d625a00d9fbd019c4134399192548ffe86f
+      body: |
+        - Install dependencies.
+        - Remove optional parameters in make call, they are not needed.
+      footer:
+        Changelog-Entry: "crelay: fix compilation issues"
+        changelog-entry: "crelay: fix compilation issues"
+        Signed-By: Lisandro Pérez Meyer <lpmeyer@ics.com>
+        signed-by: Lisandro Pérez Meyer <lpmeyer@ics.com>
+      author: Lisandro Pérez Meyer
+      nested: []
+  version: 1.0.28
+  title: ""
+  date: 2024-04-17T14:49:45.127Z
+- commits:
     - subject: "lib/flashing/devices: Add json files for Jetson Xavier NX devices"
       hash: f14b0a05c42e91dd7ce1cdfc8b6f6ab45822374b
       body: |2
