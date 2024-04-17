@@ -196,35 +196,44 @@ async function flashFlasher(filename: string, autoKit: Autokit, jumper: boolean,
     const TIMEOUT_COUNT = 30;
     let attempt = 0;
     await delay(1000 * 60);
-    while (dutOn) {
-        await delay(1000 * 10); // 10 seconds between checks
-        console.log(`waiting for DUT to be off`);
-        dutOn = await checkDutPower(autoKit);
-        // occasionally the DUT might appear to be powered down, but it isn't - we want to confirm that the DUT has stayed off for an interval of time
-        if (!dutOn) {
-            let offCount = 0;
-            console.log(`detected DUT has powered off - confirming...`);
-            for (let tries = 0; tries < POLL_TRIES; tries++) {
-                await delay(POLL_INTERVAL);
-                dutOn = await checkDutPower(autoKit);
-                if (!dutOn) {
-                    offCount += 1;
+
+    // an option for cases where we have no way to determine the state of the DUT while being flashed, in ms
+    const BLIND_WAIT = Number(process.env.FLASHER_IMAGE_WAIT) || false;
+
+    if(BLIND_WAIT === false){
+        while (dutOn) {
+            await delay(1000 * 10); // 10 seconds between checks
+            console.log(`waiting for DUT to be off`);
+            dutOn = await checkDutPower(autoKit);
+            // occasionally the DUT might appear to be powered down, but it isn't - we want to confirm that the DUT has stayed off for an interval of time
+            if (!dutOn) {
+                let offCount = 0;
+                console.log(`detected DUT has powered off - confirming...`);
+                for (let tries = 0; tries < POLL_TRIES; tries++) {
+                    await delay(POLL_INTERVAL);
+                    dutOn = await checkDutPower(autoKit);
+                    if (!dutOn) {
+                        offCount += 1;
+                    }
+                }
+                console.log(
+                    `DUT stayted off for ${offCount} checks, expected: ${POLL_TRIES}`,
+                );
+                if (offCount !== POLL_TRIES) {
+                    // if the DUT didn't stay off, then we must try the loop again
+                    dutOn = true;
                 }
             }
-            console.log(
-                `DUT stayted off for ${offCount} checks, expected: ${POLL_TRIES}`,
-            );
-            if (offCount !== POLL_TRIES) {
-                // if the DUT didn't stay off, then we must try the loop again
-                dutOn = true;
+            attempt += 1;
+            if (attempt === TIMEOUT_COUNT){
+                throw new Error(`Timed out while trying to flash internal storage!!`)
             }
         }
-        attempt += 1;
-        if (attempt === TIMEOUT_COUNT){
-            throw new Error(`Timed out while trying to flash internal storage!!`)
-        }
+        console.log('Internally flashed - powering off DUT');
+    } else {
+        console.log(`Blindly waiting for DUT to interally flash - waiting for a period of ${BLIND_WAIT}... and hoping`)
+        await delay(BLIND_WAIT);
     }
-    console.log('Internally flashed - powering off DUT');
     // power off and toggle mux.
     await delay(1000*10);
     await autoKit.power.off();
