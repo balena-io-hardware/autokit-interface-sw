@@ -370,11 +370,13 @@ async function flashJetson(filename: string, autoKit: Autokit, deviceType: strin
     const JETSON_FLASH_DIR = process.env.JETSON_FLASH_DIR || '/usr/app/jetson-flash/Orin_Nx_Nano_NVME';
     const JETSON_FLASH_SCRIPT = process.env.JETSON_FLASH_SCRIPT || 'flash_orin.sh';
     const JETSON_FLASH_BRANCH = process.env.JETSON_FLASH_BRANCH || 'master';
+    const JETSON_FLASH_REPO_URL = process.env.JETSON_FLASH_REPO_URL || 'https://github.com/balena-os/jetson-flash.git';
+
     // now start the jetson flash tool with docker. 
     // build first
 
     try{ 
-        await exec('cd /usr/app/ && git clone https://github.com/balena-os/jetson-flash.git');
+        await exec(`cd /usr/app/ && git clone ${JETSON_FLASH_REPO_URL}`);
     } catch(e){
         console.log(e)
     }
