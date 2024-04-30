@@ -1,4 +1,31 @@
 - commits:
+    - subject: "lib/flashing: Add possibility to select jetson-flash repo via env
+        variable."
+      hash: cf8649a5aca8520a08984701aea3443bbf54570b
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Oleksandr Slovak <oleksandr.slovak@dronevolt.com>
+        signed-off-by: Oleksandr Slovak <oleksandr.slovak@dronevolt.com>
+      author: Oleksandr Slovak
+      nested: []
+    - subject: "lib/flashing/devices: Add dv-xavier-nx-nvme device type to devices It
+        is for now identical to the jetson-orin-nx-xavier-nx-devkit but may
+        change in the future."
+      hash: 33090bc3540c421089820cc8bf54506335576def
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Oleksandr Slovak <oleksandr.slovak@dronevolt.com>
+        signed-off-by: Oleksandr Slovak <oleksandr.slovak@dronevolt.com>
+      author: Oleksandr Slovak
+      nested: []
+  version: 1.0.29
+  title: ""
+  date: 2024-04-30T10:54:12.133Z
+- commits:
     - subject: "crelay: fix compilation issues"
       hash: 48251d625a00d9fbd019c4134399192548ffe86f
       body: |
