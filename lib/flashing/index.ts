@@ -503,6 +503,8 @@ async function flashJetson(filename: string, autoKit: Autokit, deviceType: strin
         throw new Error(`Failed during jetson-flash container run: ${err.message}`)
     }
 
+    const nvmePowerOnDelay = Number(process.env.CAP_DELAY) || 1000
+    await delay(nvmePowerOnDelay)
 
     if(nvme){
         // wait for jetson to power off
