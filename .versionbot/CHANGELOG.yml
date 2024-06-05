@@ -1,4 +1,18 @@
 - commits:
+    - subject: "flashing/devices: Add Jetson Orin Nano 4GB Seeed json"
+      hash: 062467a1f6ebb0552422eadb960f7327d1f4a376
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Alexandru Costache <alexandru@balena.io>
+        signed-off-by: Alexandru Costache <alexandru@balena.io>
+      author: Alexandru Costache
+      nested: []
+  version: 1.0.30
+  title: ""
+  date: 2024-06-05T13:41:02.594Z
+- commits:
     - subject: "lib/flashing: Add possibility to select jetson-flash repo via env
         variable."
       hash: cf8649a5aca8520a08984701aea3443bbf54570b
