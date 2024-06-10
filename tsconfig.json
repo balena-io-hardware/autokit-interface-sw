@@ -2,7 +2,7 @@
   "include": [
     "./lib/flashing/devices/*.json",
     "./lib"
-  ],
+, "repl.ts"  ],
   "compilerOptions": {
     "typeRoots": [
       "typings",

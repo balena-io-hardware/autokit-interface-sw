@@ -1,0 +1,37 @@
+#if building via docker on local workstation, build with env variable BALENA_ARCH=amd64
+#if building via balena builder/engine then no need, this will automatically evaluate to the target device arch
+ARG BALENA_ARCH=%%BALENA_ARCH%%
+
+FROM balenalib/${BALENA_ARCH}-alpine-node:16-run-20230811
+WORKDIR /usr/app
+
+RUN install_packages libusb-dev eudev-dev dbus-dev python3 make build-base git linux-headers util-linux \
+    gstreamer-tools gst-plugins-base gst-plugins-bad gst-plugins-good \
+    bluez \
+    python3 \
+    py3-pip \
+    py3-setuptools cmake mdadm util-linux libftdi1-dev popt-dev hidapi-dev ca-certificates docker git screen
+
+  
+# hadolint ignore=DL3018
+RUN apk add --no-cache uhubctl --repository=http://dl-cdn.alpinelinux.org/alpine/edge/community || true
+
+COPY package*.json ./
+RUN npm ci
+
+COPY tsconfig.json ./
+COPY lib ./lib
+
+# build typescript
+RUN npm run build
+
+ENV UDEV 1
+ENV DBUS_SYSTEM_BUS_ADDRESS unix:path=/host/run/dbus/system_bus_socket
+
+# linux automation sd mux board requires this to be installed
+RUN pip3 install usbsdmux
+
+COPY entry.sh entry.sh
+RUN chmod +x entry.sh
+
+CMD ["./entry.sh"]
