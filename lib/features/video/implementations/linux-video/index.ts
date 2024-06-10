@@ -1,5 +1,5 @@
 import { ChildProcess, exec, spawn } from 'child_process';
-import { fs } from 'mz';
+import  * as fs  from 'fs/promises';
 import { promisify } from 'util';
 import { ensureDir } from 'fs-extra';
 
