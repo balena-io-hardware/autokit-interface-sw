@@ -1,4 +1,28 @@
 - commits:
+    - subject: add cm4-secure-boot
+      hash: dc1288e9b6729ebb44c4e65988a2ee82e63d7afc
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+    - subject: update to node 18
+      hash: 963e5e4324298a1278418cc30aba6a590134ab5c
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.31
+  title: ""
+  date: 2024-06-14T15:38:18.158Z
+- commits:
     - subject: "flashing/devices: Add Jetson Orin Nano 4GB Seeed json"
       hash: 062467a1f6ebb0552422eadb960f7327d1f4a376
       body: ""
