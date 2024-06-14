@@ -3,7 +3,7 @@ import { delay } from 'bluebird';
 import * as Bluebird from 'bluebird';
 import * as retry from 'bluebird-retry';
 import * as sdk from 'etcher-sdk';
-import { fs } from 'mz';
+import * as fs from 'fs/promises';
 import { BlockDeviceAdapter } from 'etcher-sdk/build/scanner/adapters';
 import { Autokit } from '../';
 
@@ -240,7 +240,7 @@ async function flashFlasher(filename: string, autoKit: Autokit, jumper: boolean,
     await delay(powerOnDelay)
 }
 
-async function flashUsbBoot(filename: string, autoKit: Autokit, port: usbPort, power: boolean, jumper: boolean){
+async function flashUsbBoot(filename: string, autoKit: Autokit, port: usbPort, power: boolean, jumper: boolean, sb?: boolean){
      // this delay is how long to wait after internal flashing before trying to re power the board. For the case where devices have capacitors that
     // take time to drain
     const powerOnDelay = Number(process.env.CAP_DELAY) || 1000*60;
@@ -264,6 +264,11 @@ async function flashUsbBoot(filename: string, autoKit: Autokit, port: usbPort, p
     }
 
     // etcher-sdk (power on) usboot
+    // This is the path to the folder containing the cm4 secureboot artifacts on the autokit
+    const bootImageFolder = (sb) ? (process.env.SB_ARTIFACT || '/data/secure-boot-msd/') : undefined;
+
+    console.log(bootImageFolder)
+
     const adapters: sdk.scanner.adapters.Adapter[] = [
         new BlockDeviceAdapter({
             includeSystemDrives: () => false,
@@ -271,7 +276,7 @@ async function flashUsbBoot(filename: string, autoKit: Autokit, port: usbPort, p
             write: true,
             direct: true,
         }),
-        new sdk.scanner.adapters.UsbbootDeviceAdapter(),
+        new sdk.scanner.adapters.UsbbootDeviceAdapter(bootImageFolder),
     ];
     const deviceScanner = new sdk.scanner.Scanner(adapters);
     console.log('Waiting for compute module');
@@ -331,6 +336,8 @@ async function flashUsbBoot(filename: string, autoKit: Autokit, port: usbPort, p
                 ) {
                     console.log('Attached compute module.');
                     clearTimeout(timeout);
+                    drive.oWrite = true;
+					drive.oDirect = true;
                     resolve(drive);
                     deviceScanner.removeListener('attach', onAttach);
                 }
@@ -642,7 +649,7 @@ async function flash(filename: string, deviceType: string, autoKit: Autokit, por
             if(port === undefined){
                 throw new Error('No usb port specified!')
             }
-            await flashUsbBoot(filename, autoKit, port, flashProcedure.power, flashProcedure.jumper);
+            await flashUsbBoot(filename, autoKit, port, flashProcedure.power, flashProcedure.jumper, flashProcedure.sb);
             break;
         }
         case 'flasher': {
