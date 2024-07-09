@@ -429,11 +429,13 @@ async function flashJetson(filename: string, autoKit: Autokit, deviceType: strin
                     if (code === 0) {
                         resolve();
                     } else {
-                        reject(new Error(`Docker build exit code was: ${code}`));
+                        autoKit.power.off();
+                        reject(new Error(`Docker build exit code was: ${code}. Powered off DUT.`));
                     }
                 });
                 build.on('error', (err) => {
-                    reject(new Error(`Error with docker build: ${err.message}`));
+                    autoKit.power.off();
+                    reject(new Error(`Error with docker build: ${err.message}. Powered off DUT.`));
                 });
             });
         } else {
@@ -454,19 +456,24 @@ async function flashJetson(filename: string, autoKit: Autokit, deviceType: strin
                     if (code === 0) {
                         resolve();
                     } else {
-                        console.log(`Got exit code ${code}.. error`);
+                        autoKit.power.off();
+                        console.log(`Got exit code ${code}.. error. Powered off DUT.`);
                         reject(new Error(`Docker build exit code was: ${code}`));
                     }
                 });
                 buildAndRun.on('error', (err) => {
-                    reject(new Error(`Error with docker build: ${err.message}`));
+                    autoKit.power.off();
+                    reject(new Error(`Error with docker build: ${err.message}. Powered off DUT.`));
                 });
             });
         }
     } catch (err: any){
-        throw new Error(`Failed during jetson-flash container build: ${err.message}`);
+        await autoKit.power.off();
+        throw new Error(`Failed during jetson-flash container build: ${err.message}. Powered off DUT`);
     }
 
+    await autoKit.power.on();
+    await delay(5 * 1000);
     // run flash container
     console.log(`File path: ${filename}`)
     // Then run container
@@ -498,16 +505,19 @@ async function flashJetson(filename: string, autoKit: Autokit, deviceType: strin
                 if (code === 0) {
                     resolve();
                 } else {
-                    console.log(`Got exit code ${code}.. error`);
+                    autoKit.power.off();
+                    console.log(`Got exit code ${code}.. error. Powered off DUT.`);
                     reject(new Error(`Docker run exit code was: ${code}`))
                 }
             });
             flash.on('error', (err) => {
-                reject(new Error(`Error with docker run: ${err.message}`));
+                autoKit.power.off();
+                reject(new Error(`Error with docker run: ${err.message}. Powered off DUT.`));
             });
         });
     } catch(err:any){
-        throw new Error(`Failed during jetson-flash container run: ${err.message}`)
+        await autoKit.power.off();
+        throw new Error(`Failed during jetson-flash container run: ${err.message}. Powered off DUT.`)
     }
 
 
@@ -544,7 +554,8 @@ async function flashJetson(filename: string, autoKit: Autokit, deviceType: strin
             }
             attempt += 1;
             if (attempt === TIMEOUT_COUNT){
-                throw new Error(`Timed out while trying to flash internal storage!!`)
+                await autoKit.power.off();
+                throw new Error(`Timed out while trying to flash internal storage!!. Powered off DUT.`)
             }
         }
         console.log('Internally flashed - powering off DUT');
