@@ -1,4 +1,30 @@
 - commits:
+    - subject: "flashing/index: Power off Jetson DUT on container flash failure"
+      hash: 1c4a2b71e8dd34a302064fed541d40262b75fa0c
+      body: >
+        This should allow the DUT to cool off while not in use, because in
+        rcm-boot mode the fan is not spinning.
+
+
+        Also, with this commit we check if the following sporadic error observed
+        on J3010 disappears:
+
+          ECID is
+          Board ID() version() sku() revision()
+          Chip SKU(00:00:00:D3) ramcode() fuselevel(fuselevel_production)   board_FAB()
+          emc_opt_disable_fuse:(0)
+          Error: Unrecognized module SKU
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Alexandru Costache <alexandru@balena.io
+        signed-off-by: Alexandru Costache <alexandru@balena.io
+      author: Alexandru
+      nested: []
+  version: 1.0.32
+  title: ""
+  date: 2024-07-09T08:56:03.164Z
+- commits:
     - subject: add cm4-secure-boot
       hash: dc1288e9b6729ebb44c4e65988a2ee82e63d7afc
       body: ""
