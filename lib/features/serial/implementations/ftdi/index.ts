@@ -2,12 +2,13 @@ const SerialPort  = require('serialport');
 
 export class Ftdi implements Serial {
     public DEV_SERIAL = '/dev/ttyUSB0' || process.env.DEV_SERIAL;
+    public BAUD_RATE = Number(process.env.BAUD_RATE || 115200);
     public serial : any;
-    constructor(baudRate = 115200){
+    constructor(){
         this.serial = new SerialPort(
             this.DEV_SERIAL,
             {
-                baudRate: baudRate,
+                baudRate: this.BAUD_RATE,
                 autoOpen: false,
             });
     
@@ -18,9 +19,20 @@ export class Ftdi implements Serial {
 
     async open(){
         if(this.serial.isOpen){
-            console.log(`Serial already open!`)
+            console.log(`Serial already open!`);
+            return this.serial;
         } else {
-            this.serial.open();
+            try{
+                console.log(`Opening Serial port ${this.DEV_SERIAL} with baud rate: ${this.BAUD_RATE}`)
+                this.serial.open(() => {
+                    console.log('DUT serial is opened');
+                    this.serial?.flush();
+                })
+                return this.serial;
+            } catch(e){
+                console.log(e)
+            }
+            
         }
     }
 
