@@ -34,6 +34,15 @@ There are multiple possibilities here:
 - If you do that, use `generic-flasher-boot-switch`.
 - if testing balenaOS - flash the internal storage of the device once manually. Then leave the switch in the internal storage position. Then connect it to the autokit. Future boots, the device will automatically boot from a flasher image on the SD card if present, or internal storage otherwise. This method requires no automated boot switch toggling, but may be weak for testing BSP updates
 
+#### Power of detection for flasher images
+
+There are currently 2 ways to detect that a device running the flasher image has powered down after internal flashing:
+
+1. `ethernet`: (default) The ethernet carrier signal is used - the autokit will use the interface configured via the `WIRED_IF` env variable. `POWER_OFF_TIMEOUT` can be used to control the number of cycles to wait and check the signal.
+2. `serial`: The serial output of the DUT is monitored for a message `reboot: Power down` , configurable via the `POWER_OFF_MESSAGE` env variable. The interface defined via the `DEV_SERIAL` will be used, and this requires the `ftdi` serial implementation to be used. `POWER_OFF_TIMEOUT` can be used to set a timeout in ms (default 5 mins).
+
+The method is selectable via `POWER_OFF_SELECTOR`, with `ethernet` or `serial`
+
 ### USB-BOOT / raspberry pi compute module devices (CM3/CM4)
 
 For raspberry pi compute module devices, the autokit can bring them up into mass storage mode then write the OS image.
