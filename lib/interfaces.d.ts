@@ -38,7 +38,7 @@ interface Serial extends Base{
     serial: any;
     write(data: string): Promise<string | void>;
     read(): Promise<string>;
-    open(): Promise<void>;
+    open(): Promise<Stream.Readable | null>;
     close(): Promise<void>;
 }
 
