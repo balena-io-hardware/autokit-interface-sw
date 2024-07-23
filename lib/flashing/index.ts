@@ -6,6 +6,7 @@ import * as sdk from 'etcher-sdk';
 import * as fs from 'fs/promises';
 import { BlockDeviceAdapter } from 'etcher-sdk/build/scanner/adapters';
 import { Autokit } from '../';
+import { waitForPowerOff } from './powerDetection';
 
 /**
  * Flash an image to a disk - this is the low level function used to flash a disk (SD card, USD storage device etc)
@@ -129,22 +130,6 @@ async function flashSD(filename: string, autoKit: Autokit){
     
 }
 
-/**
- * Checks whether the DUT is powered using Ethernet carrier detection
- **/
-async function checkDutPower(autoKit:Autokit) {
-    const [stdout, _stderr] = await exec(`cat /sys/class/net/${autoKit.network.wiredIface}/carrier`);
-    const file = stdout.toString();
-    if (file.includes('1')) {
-        console.log(`DUT is currently On`);
-        return true;
-    } else {
-        console.log(`DUT is currently Off`);
-        return false;
-    }
-}
-
-
 const KEY_DELAY = Number(process.env.KEY_DELAY) || 500;
 async function keyboardSequence(autoKit: Autokit, keyboard: [string]){
     for(let key of keyboard){
@@ -181,53 +166,8 @@ async function flashFlasher(filename: string, autoKit: Autokit, jumper: boolean,
 
     await autoKit.power.on();
 
-    
+    await waitForPowerOff(autoKit);
 
-    // dut will now internally flash - need to wait until we detect DUT has powered off
-    // can be done through ethernet carrier signal, or through current measurement (or something else...)
-    // FOR NOW: use the network
-    // check if the DUT is on first
-    let dutOn = false;
-    while (!dutOn) {
-        console.log(`waiting for DUT to be on`);
-        dutOn = await checkDutPower(autoKit);
-        await delay(1000 * 5); // 5 seconds between checks
-    }
-    // once we confirmed the DUT is on, we wait for it to power down again, which signals the flashing has finished
-    // wait initially for 60s and then every 10s before checking if the board performed a shutdown after flashing the internal storage
-    const POLL_INTERVAL = 1000; // 1 second
-    const POLL_TRIES = 20; // 20 tries
-    const TIMEOUT_COUNT = 30;
-    let attempt = 0;
-    await delay(1000 * 60);
-    while (dutOn) {
-        await delay(1000 * 10); // 10 seconds between checks
-        console.log(`waiting for DUT to be off`);
-        dutOn = await checkDutPower(autoKit);
-        // occasionally the DUT might appear to be powered down, but it isn't - we want to confirm that the DUT has stayed off for an interval of time
-        if (!dutOn) {
-            let offCount = 0;
-            console.log(`detected DUT has powered off - confirming...`);
-            for (let tries = 0; tries < POLL_TRIES; tries++) {
-                await delay(POLL_INTERVAL);
-                dutOn = await checkDutPower(autoKit);
-                if (!dutOn) {
-                    offCount += 1;
-                }
-            }
-            console.log(
-                `DUT stayted off for ${offCount} checks, expected: ${POLL_TRIES}`,
-            );
-            if (offCount !== POLL_TRIES) {
-                // if the DUT didn't stay off, then we must try the loop again
-                dutOn = true;
-            }
-        }
-        attempt += 1;
-        if (attempt === TIMEOUT_COUNT){
-            throw new Error(`Timed out while trying to flash internal storage!!`)
-        }
-    }
     console.log('Internally flashed - powering off DUT');
     // power off and toggle mux.
     await delay(1000*10);
@@ -527,41 +467,7 @@ async function flashJetson(filename: string, autoKit: Autokit, deviceType: strin
 
     if(nvme){
         // wait for jetson to power off
-        const POLL_INTERVAL = 1000; // 1 second
-        const POLL_TRIES = 20; // 20 tries
-        const TIMEOUT_COUNT = 30000;
-        let attempt = 0;
-        let dutOn = true;
-        await delay(1000 * 60);
-        while (dutOn) {
-            await delay(1000 * 10); // 10 seconds between checks
-            console.log(`waiting for DUT to be off`);
-            dutOn = await checkDutPower(autoKit);
-            // occasionally the DUT might appear to be powered down, but it isn't - we want to confirm that the DUT has stayed off for an interval of time
-            if (!dutOn) {
-                let offCount = 0;
-                console.log(`detected DUT has powered off - confirming...`);
-                for (let tries = 0; tries < POLL_TRIES; tries++) {
-                    await delay(POLL_INTERVAL);
-                    dutOn = await checkDutPower(autoKit);
-                    if (!dutOn) {
-                        offCount += 1;
-                    }
-                }
-                console.log(
-                    `DUT stayted off for ${offCount} checks, expected: ${POLL_TRIES}`,
-                );
-                if (offCount !== POLL_TRIES) {
-                    // if the DUT didn't stay off, then we must try the loop again
-                    dutOn = true;
-                }
-            }
-            attempt += 1;
-            if (attempt === TIMEOUT_COUNT){
-                await autoKit.power.off();
-                throw new Error(`Timed out while trying to flash internal storage!!. Powered off DUT.`)
-            }
-        }
+        await waitForPowerOff(autoKit);
         console.log('Internally flashed - powering off DUT');
     }
 
