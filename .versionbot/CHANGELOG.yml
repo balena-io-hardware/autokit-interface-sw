@@ -1,4 +1,22 @@
 - commits:
+    - subject: "flashing/devices: Add Jetson AGX Orin Devkit 64GB"
+      hash: 78eded8ce60df395aa9a95374cd5f27c811c4c2f
+      body: |
+        Even if the flasher image will be switched
+        to provisioning the eMMC, a flasher image
+        will still be used so nvme can be kept in the
+        json.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Alexandru Costache <alexandru@balena.io>
+        signed-off-by: Alexandru Costache <alexandru@balena.io>
+      author: Alexandru Costache
+      nested: []
+  version: 1.0.33
+  title: ""
+  date: 2024-07-29T11:16:59.870Z
+- commits:
     - subject: "flashing/index: Power off Jetson DUT on container flash failure"
       hash: 1c4a2b71e8dd34a302064fed541d40262b75fa0c
       body: >
