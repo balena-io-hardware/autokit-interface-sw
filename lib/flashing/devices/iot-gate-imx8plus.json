@@ -1,4 +1,3 @@
 {
-    "type": "iot-gate",
-    "dram": "d2d4"
+    "type": "iot-gate"
 }
