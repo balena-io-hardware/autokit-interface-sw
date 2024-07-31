@@ -23,7 +23,7 @@ export class LinuxAut implements SdMux {
         }
 
         await execAsync(`usbsdmux /dev/${this.sgDev} host`);
-        let sdCheck = await execAsync(`ls /dev/disk/by-id/usb-LinuxAut_sdmux_HS-SD_MMC_* | head -1`);
+        let sdCheck = await execAsync(`ls /dev/disk/by-id/usb-LinuxAut* | head -1`);
         this.DEV_SD = sdCheck.stdout.trim();
         console.log(`SD MUX is: ${this.DEV_SD}`);
     }
