@@ -1,4 +1,21 @@
 - commits:
+    - subject: "sd-mux: linux-gmbh: fix seach for device for new mux board revision"
+      hash: 74b87f188889c66cd1d25bb3384402aa42dca277
+      body: >
+        new revisions of this sd mux have a different identifier - so we have to
+        update the string used to search for it so it works with both old and
+        new
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.34
+  title: ""
+  date: 2024-07-31T15:57:06.406Z
+- commits:
     - subject: "flashing/devices: Add Jetson AGX Orin Devkit 64GB"
       hash: 78eded8ce60df395aa9a95374cd5f27c811c4c2f
       body: |
