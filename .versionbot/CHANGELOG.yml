@@ -1,4 +1,34 @@
 - commits:
+    - subject: "lib/flashing: Add iotdin-imx8p json files"
+      hash: 62a2f2a57b4437c6d194183eb568dfb4306c2af0
+      body: |
+        This is based on the slugs currently proposed by
+        https://github.com/balena-io/contracts/pull/434
+
+        The iotdin-imx8p and iot-gate-imx8plus devices share
+        the same flashing procedure and flashing tools repository.
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Alexandru Costache <alexandru@balena.io>
+        signed-off-by: Alexandru Costache <alexandru@balena.io>
+      author: Alexandru Costache
+      nested: []
+    - subject: "lib/flashing: Remove dram arg for iot-gate-imx8plus"
+      hash: f3821cd578b91f6a43d99fad415e419eca44e214
+      body: |
+        The DRAM argument has been removed in the flashing tools
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Alexandru Costache <alexandru@balena.io>
+        signed-off-by: Alexandru Costache <alexandru@balena.io>
+      author: Alexandru Costache
+      nested: []
+  version: 1.0.35
+  title: ""
+  date: 2024-08-01T15:03:40.336Z
+- commits:
     - subject: "sd-mux: linux-gmbh: fix seach for device for new mux board revision"
       hash: 74b87f188889c66cd1d25bb3384402aa42dca277
       body: >
