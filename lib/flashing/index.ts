@@ -573,7 +573,7 @@ async function flashJetson(filename: string, autoKit: Autokit, deviceType: strin
    
 }
 
-async function flashIotGate(filename: string, autoKit: Autokit, port: usbPort, dram: string){
+async function flashIotGate(filename: string, autoKit: Autokit, port: usbPort){
     const powerOnDelay = Number(process.env.CAP_DELAY) || 1000*60*5;
 
     // ensure we have latest flasher tool
@@ -604,8 +604,6 @@ async function flashIotGate(filename: string, autoKit: Autokit, port: usbPort, d
                 [
                 '-a',
                 'armv7',
-                '-d',
-                dram,
                 '-i',
                 filename
                 ], 
@@ -675,7 +673,7 @@ async function flash(filename: string, deviceType: string, autoKit: Autokit, por
             if(port === undefined){
                 throw new Error('No usb port specified!')
             }
-            await flashIotGate(filename, autoKit, port, flashProcedure.dram)
+            await flashIotGate(filename, autoKit, port)
         }
     }
 }
