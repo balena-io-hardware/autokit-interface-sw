@@ -110,6 +110,8 @@ async function toggleUsb(state: boolean, port: usbPort) {
  * Flash an image to a disk - this is the low level function used to flash a disk (SD card, USD storage device etc)
  **/
 async function flashSD(filename: string, autoKit: Autokit){
+    const SD_MUX_DELAY = Number(process.env.SD_MUX_DELAY) || 1000*30
+
     console.log(`Entering flash method for SD card boot devices...`);
     await autoKit.power.off();
     await delay(1000 * 5)
@@ -122,6 +124,8 @@ async function flashSD(filename: string, autoKit: Autokit){
     await flashToDisk(drive, filename);
     console.log('Flashing completed');
     await autoKit.sdMux.toggleMux('dut');
+
+    await delay(SD_MUX_DELAY);
     
 }
 
