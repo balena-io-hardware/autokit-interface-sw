@@ -80,6 +80,8 @@ class NetworkManager {
 			'802-11-wireless': {
 				mode: new dbus.Variant('s', 'ap'),
 				ssid: new dbus.Variant('ay', NetworkManager.stringToArrayOfBytes(ssid)),
+				band: new dbus.Variant('s', 'bg'),
+				...(process.env.WIFI_AP_CHANNEL && {channel: new dbus.Variant('u', Number(process.env.WIFI_AP_CHANNEL))}) 
 			},
 			'802-11-wireless-security': {
 				'key-mgmt': new dbus.Variant('s', 'wpa-psk'),
