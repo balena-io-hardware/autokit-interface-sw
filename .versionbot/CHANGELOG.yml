@@ -1,4 +1,18 @@
 - commits:
+    - subject: allow for configurable wifi access point channel
+      hash: 2dd3f8cb583ce36d6389286bc09453166822293a
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.0.37
+  title: ""
+  date: 2024-08-07T08:29:27.800Z
+- commits:
     - subject: add configurable delay to wait for sd mux to settle
       hash: fba385f903ea38198b4bb15c4b76c046363a1bf4
       body: ""
