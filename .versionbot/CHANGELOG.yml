@@ -1,4 +1,18 @@
 - commits:
+    - subject: "power: crelay: clean up and enable use of multiple compatible devices"
+      hash: 0706a12084374d09c3f6bd40e33a5a821fed2b24
+      body: ""
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.1.0
+  title: ""
+  date: 2024-08-22T08:45:57.316Z
+- commits:
     - subject: allow for configurable wifi access point channel
       hash: 2dd3f8cb583ce36d6389286bc09453166822293a
       body: ""
