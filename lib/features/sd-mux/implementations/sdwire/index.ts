@@ -13,7 +13,7 @@ export class SdWire implements SdMux {
         // download the tool
         try {
             await execAsync('apk add cmake make build-base');
-            await execAsync('cd /usr/app/ && git clone https://git.tizen.org/cgit/tools/testlab/sd-mux');
+            await execAsync('cd /usr/app/ && git clone https://github.com/3mdeb/sd-mux.git');
             await execAsync('cd /usr/app/sd-mux/ && mkdir build && cd build && cmake ../ && make');
             await execAsync('cp /usr/app/sd-mux/build/src/sd-mux-ctrl /usr/bin/sd-mux-ctrl');
         
