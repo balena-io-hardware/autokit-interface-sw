@@ -33,17 +33,17 @@ export class SdWire implements SdMux {
             console.log('Switching SD card to host');
             await execAsync('sd-mux-ctrl --ts -v 0');
             // it can take some time before the mux is toggled - so just to be sure, we can add some delay here
-            await delay(5000);
+            await delay(1000);
         } else if(state === 'dut'){
             console.log('Switching SD card to DUT');
             await execAsync('sd-mux-ctrl --dut -v 0');
             // it can take some time before the mux is toggled - so just to be sure, we can add some delay here
-            await delay(5000);
+            await delay(1000);
         }
     }
 
     async teardown(): Promise<void> {
-        
+
     }
-            
+
 }
