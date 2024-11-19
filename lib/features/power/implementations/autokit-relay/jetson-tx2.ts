@@ -5,38 +5,24 @@ import { exec } from 'mz/child_process';
 // Device specific override for Tx2 power on / off sequencing
 // Assumes this USB relay is connected to J6, NO
 export class JetsonTx2Power extends AutokitRelay {
-    // Only way of determining Tx2 power state is via GPIO J21.1
-    public gpio: string;
+    // Only way of determining Tx2 power state is checking the ethernet carrier state
+    public wiredIface: string;
 
     constructor(){
         super();
-        this.gpio = process.env.GPIO_POWER_DET || '112'
+        this.wiredIface = process.env.WIRED_IF || 'eth1';
     }
 
-    async setup(){
-        await super.setup();
-        // Setup GPIO pin to detect power state
-        await exec(`echo ${this.gpio} > /sys/class/gpio/export || true`).catch(() => {
-            console.log(`Failed to export gpio for checking DUT power`);
-        });
-        await exec(`echo in > /sys/class/gpio/gpio${this.gpio}/direction || true`).catch(() => {
-            console.log(`Failed to set gpio${this.gpio} as input`);
-        });
-        await delay(500);
-    }
-
-    private async checkDutPower() {
-		const [stdout, stderr] = await exec(`cat /sys/class/gpio/gpio${this.gpio}/value`);
-		console.log(stderr);
-		const file = stdout.toString();
-
-		if (file.includes('1')) {
-			console.log(`checkDutPower() - DUT is currently On`);
-			return true;
-		} else {
-			console.log(`checkDutPower() - DUT is currently Off`);
-			return false;
-		} 
+    async checkDutPower() {
+        const [stdout, _stderr] = await exec(`cat /sys/class/net/${this.wiredIface}/carrier`);
+        const file = stdout.toString();
+        if (file.includes('1')) {
+            console.log(`DUT is currently On`);
+            return true;
+        } else {
+            console.log(`DUT is currently Off`);
+            return false;
+        }
     }
 
     // Power on the DUT
