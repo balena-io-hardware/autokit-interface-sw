@@ -3,10 +3,10 @@
 const USBRelay = require("@balena/usbrelay");
 
 export class AutokitRelay implements Power {
-    private relayId: string
-    private powerRelay: any
-    private conn: boolean
-    private relayNum: number
+    public relayId: string
+    public powerRelay: any
+    public conn: boolean
+    public relayNum: number
     constructor(){
         this.relayId = process.env.POWER_RELAY_SERIAL || 'HURTM'
         this.relayNum = Number(process.env.POWER_RELAY_NUM || '0')
