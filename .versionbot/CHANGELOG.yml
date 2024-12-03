@@ -1,4 +1,21 @@
 - commits:
+    - subject: "sd-wire: use a different mirror for tooling"
+      hash: 26d2e9483e28cb0d5a0597d209722bd2b91dbe37
+      body: >
+        The mirror we were using to clone the sd-mux-ctrl repo from was taking a
+        long time to clone - replace it with this, which I think is functionally
+        the same
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.1.1
+  title: ""
+  date: 2024-12-03T10:49:03.017Z
+- commits:
     - subject: "power: crelay: clean up and enable use of multiple compatible devices"
       hash: 0706a12084374d09c3f6bd40e33a5a821fed2b24
       body: ""
