@@ -255,6 +255,10 @@ async function flashUsbBoot(filename: string, autoKit: Autokit, port: usbPort, p
     // if applicable, switch jumper to msd mode
     if(jumper){
         await autoKit.digitalRelay.on()
+        await delay(5*1000);
+        await autoKit.power.on();
+        await delay(5*1000);
+        await autoKit.power.off();
     } else {
         // power on the USB - but ensure it is powered off first - this way we ensure we get the device in a fresh state
         await toggleUsb(false, port);
@@ -367,6 +371,10 @@ async function flashUsbBoot(filename: string, autoKit: Autokit, port: usbPort, p
     // if applicable, turn off msd mode
     if(jumper){
         await autoKit.digitalRelay.off()
+        await delay(1000*10)
+        await autoKit.power.on();
+        await delay(1000*5)
+        await autoKit.power.off();
     } else {
         await toggleUsb(false, port);
         await toggleUsb(false, port);
