@@ -1,4 +1,19 @@
 - commits:
+    - subject: Change dbus-next to 0.9.0
+      hash: 1d02d632cd559239d1f96b203f14a468a5e76cde
+      body: |
+        This is to fix builds with node 18.20.5 + python > 3.11
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: Ryan Cooke
+      nested: []
+  version: 1.1.2
+  title: ""
+  date: 2025-01-13T15:36:10.641Z
+- commits:
     - subject: "sd-wire: use a different mirror for tooling"
       hash: 26d2e9483e28cb0d5a0597d209722bd2b91dbe37
       body: >
