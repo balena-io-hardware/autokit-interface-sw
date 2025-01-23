@@ -1,4 +1,18 @@
 - commits:
+    - subject: "lib/index.ts: Trigger new build and release"
+      hash: 2dffbcc43469553ffd8be65b0f292e372a32f57e
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Alexandru Costache <alexandru@balena.io>
+        signed-off-by: Alexandru Costache <alexandru@balena.io>
+      author: Alexandru
+      nested: []
+  version: 1.1.4
+  title: ""
+  date: 2025-01-23T11:58:50.932Z
+- commits:
     - subject: "jetson-xavier-nx-devkit-tx2-nx: Add TX2 NX json"
       hash: 7d8218606087a4ac90f0c294593d6098ef465e48
       body: |
