@@ -1,4 +1,4 @@
-// import all features
+// import all necessary features
 import { networkImplementations } from './features/network';
 import { powerImplementations } from './features/power';
 import { videoImplementations } from './features/video';
