@@ -1,4 +1,57 @@
 - commits:
+    - subject: "power: jetsonTx2: use eth carrier instead of GPIO for power state"
+      hash: 2c25b18c249639ae1aeae2f5d0637fefa91480db
+      body: ""
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: Ryan Cooke
+      nested: []
+    - subject: "power: add override for tx2 device type"
+      hash: 2ece30737471a62debdf408c1373b69bc325397b
+      body: >
+        This adds a subclass for use with the tx2 device type derived from
+        autokitRelay() - it modifies the on and off functions to use the tx2
+        button press sequence instead
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: Ryan Cooke
+      nested: []
+    - subject: "flashing: allow for different power off detection mechanisms"
+      hash: 5e8fb69ede821205a3506b124dae51da898b4ec2
+      body: >
+        Allows for the selection of either ethernet carrier or serial output to
+        detect DUT power off
+      footer:
+        Change-type: minor
+        change-type: minor
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+    - subject: "serial: make baud rate configurable and return object"
+      hash: 5cb534cc64f2806d1f7bbf218569d51cc3239e5a
+      body: >
+        This makes the baudrate configurable and makes the opened serial port
+        accessible - so different parts of the test can share and use this
+        single object and avoid conflicts accessing the port. Also adds error
+        handling for when the port can't be opened
+      footer:
+        Change-type: patch
+        change-type: patch
+        Signed-off-by: Ryan Cooke <ryan@balena.io>
+        signed-off-by: Ryan Cooke <ryan@balena.io>
+      author: rcooke-warwick
+      nested: []
+  version: 1.2.0
+  title: ""
+  date: 2025-02-14T07:54:42.514Z
+- commits:
     - subject: "lib/index.ts: Trigger new build and release"
       hash: 2dffbcc43469553ffd8be65b0f292e372a32f57e
       body: ""
